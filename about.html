@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - StreamZone IPTV</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1DB954;
+            --primary-dark: #1aa34a;
+            --dark: #0e0e0e;
+            --dark-secondary: #1a1a1a;
+            --gray: #2a2a2a;
+            --light-gray: #b3b3b3;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: rgba(14, 14, 14, 0.95);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            background-color: var(--dark);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary) !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--white) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary) !important;
+        }
+
+        .navbar-toggler {
+            border: none;
+            color: var(--white);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* Enhanced Navbar Auth Buttons */
+        .btn-nav-auth {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid;
+            margin-left: 10px;
+        }
+
+        .btn-nav-auth::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+            z-index: 0;
+        }
+
+        .btn-nav-auth:hover::before {
+            width: 250px;
+            height: 250px;
+        }
+
+        .btn-nav-auth i,
+        .btn-nav-auth span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-nav-signin {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-nav-signin:hover {
+            background: linear-gradient(135deg, var(--primary), #1aa34a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(29, 185, 84, 0.35);
+            border-color: transparent;
+            color: var(--white);
+        }
+
+        .btn-nav-signup {
+            background: linear-gradient(135deg, var(--primary), #17a34a);
+            border-color: transparent;
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(29, 185, 84, 0.25);
+        }
+
+        .btn-nav-signup:hover {
+            background: linear-gradient(135deg, #17a34a, #0f8239);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(29, 185, 84, 0.4);
+            color: var(--white);
+        }
+
+        @media (max-width: 991px) {
+            .btn-nav-auth {
+                margin: 10px 0;
+                justify-content: center;
+            }
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 150px 0 80px;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--light-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--light-gray);
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* About Content */
+        .about-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--light-gray);
+        }
+
+        .highlight-box {
+            background-color: var(--dark-secondary);
+            border-left: 4px solid var(--primary);
+            padding: 30px;
+            border-radius: 0 10px 10px 0;
+            margin: 30px 0;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 50px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--light-gray);
+        }
+
+        /* How It Works */
+        .step-card {
+            background-color: var(--dark-secondary);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray);
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Devices Section */
+        .device-card {
+            background-color: var(--dark-secondary);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray);
+        }
+
+        .device-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+        }
+
+        .device-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .device-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Policy Section */
+        .policy-card {
+            background-color: var(--dark-secondary);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--gray);
+        }
+
+        .policy-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .policy-content {
+            color: var(--light-gray);
+            line-height: 1.7;
+        }
+
+        .policy-content ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .policy-content li {
+            margin-bottom: 10px;
+        }
+
+        /* Team Section */
+        .team-card {
+            background-color: var(--dark-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray);
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .team-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .team-info {
+            padding: 25px;
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .team-role {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .team-desc {
+            color: var(--light-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-secondary);
+            padding: 60px 0 20px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-description {
+            color: var(--light-gray);
+            margin-bottom: 20px;
+        }
+
+        .footer-links h5 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links ul li a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--gray);
+            color: var(--white);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Scroll to Top */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 100px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px rgba(29, 185, 84, 0.3);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .page-header {
+                padding: 130px 0 60px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .scroll-to-top {
+                right: 25px;
+                bottom: 90px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+
+            .stats-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">StreamZone</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="plans.html">Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="channels.html">Channels</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="btn-nav-auth btn-nav-signin" href="signin.html">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Sign In</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-nav-auth btn-nav-signup" href="signup.html">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">About StreamZone</h1>
+            <p class="page-subtitle">Learn about our mission, values, and how we're revolutionizing the IPTV industry
+                with premium streaming services.</p>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h2 class="section-title">Our <span>Story</span></h2>
+                    <div class="about-content">
+                        <p>Founded in 2018, StreamZone began as a small startup with a big vision: to deliver premium
+                            television content through internet protocol technology, making entertainment more
+                            accessible and affordable for everyone.</p>
+
+                        <p>What started as a passion project among tech enthusiasts has grown into one of the most
+                            trusted IPTV service providers worldwide, serving over 50,000 satisfied customers across
+                            120+ countries.</p>
+
+                        <div class="highlight-box">
+                            <p>Our mission is simple: to provide the highest quality streaming experience with an
+                                extensive channel selection, reliable service, and exceptional customer support at an
+                                unbeatable value.</p>
+                        </div>
+
+                        <p>We continuously invest in our infrastructure and technology to ensure our customers enjoy
+                            buffer-free streaming, crystal-clear picture quality, and access to the latest content from
+                            around the globe.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1558008258-3256797b43f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2064&q=80"
+                        alt="StreamZone Team" class="img-fluid rounded">
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Happy Customers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">15K+</span>
+                    <span class="stat-label">Channels</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">120+</span>
+                    <span class="stat-label">Countries</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Support</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How IPTV Works Section -->
+    <section class="section" style="background-color: var(--dark-secondary);">
+        <div class="container">
+            <h2 class="section-title">How <span>IPTV Works</span></h2>
+            <p class="section-subtitle">Internet Protocol Television (IPTV) delivers television content over Internet
+                Protocol (IP) networks instead of traditional terrestrial, satellite, or cable formats.</p>
+
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Content Sources</h3>
+                        <p>We source content from various providers worldwide, including live TV channels, movies, and
+                            series.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Encoding & Streaming</h3>
+                        <p>Content is encoded into digital format and streamed via our high-speed servers to your
+                            device.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Secure Delivery</h3>
+                        <p>Your subscription provides secure access to our content library through encrypted
+                            connections.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Your Device</h3>
+                        <p>Watch on any compatible device with our app or supported media player for seamless viewing.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Devices Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Supported <span>Devices</span></h2>
+            <p class="section-subtitle">StreamZone works with a wide range of devices, ensuring you can enjoy your
+                favorite content anywhere, anytime.</p>
+
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="device-card">
+                        <div class="device-icon">
+                            <i class="fab fa-android"></i>
+                        </div>
+                        <h3 class="device-name">Android Devices</h3>
+                        <p>Smartphones, tablets, Android TV boxes, and Google TV.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="device-card">
+                        <div class="device-icon">
+                            <i class="fab fa-apple"></i>
+                        </div>
+                        <h3 class="device-name">Apple Devices</h3>
+                        <p>iPhone, iPad, Apple TV, and Mac computers.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="device-card">
+                        <div class="device-icon">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <h3 class="device-name">Smart TVs</h3>
+                        <p>Samsung, LG, Sony, and other Smart TV platforms.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="device-card">
+                        <div class="device-icon">
+                            <i class="fab fa-amazon"></i>
+                        </div>
+                        <h3 class="device-name">Amazon Fire TV</h3>
+                        <p>Fire TV Stick, Fire TV Cube, and Fire TV Edition televisions.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="device-card">
+                        <div class="device-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3 class="device-name">Windows & Mac</h3>
+                        <p>Desktop and laptop computers with VLC, Kodi, or our web player.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="device-card">
+                        <div class="device-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3 class="device-name">Gaming Consoles</h3>
+                        <p>PlayStation and Xbox consoles with browser support.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="device-card">
+                        <div class="device-icon">
+                            <i class="fas fa-broadcast-tower"></i>
+                        </div>
+                        <h3 class="device-name">Mag Devices</h3>
+                        <p>Popular set-top boxes designed specifically for IPTV services.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="device-card">
+                        <div class="device-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="device-name">Other Devices</h3>
+                        <p>Formuler devices, Chromecast, Roku, and many more.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Policies Section -->
+    <section class="section" style="background-color: var(--dark-secondary);">
+        <div class="container">
+            <h2 class="section-title">Our <span>Policies</span></h2>
+
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="policy-card">
+                        <h3 class="policy-title">Privacy Policy</h3>
+                        <div class="policy-content">
+                            <p>At StreamZone, we take your privacy seriously. Our privacy policy outlines how we
+                                collect, use, and protect your personal information:</p>
+                            <ul>
+                                <li>We collect only necessary information to provide and improve our services</li>
+                                <li>Your payment information is processed securely through encrypted channels</li>
+                                <li>We do not sell or share your personal data with third parties</li>
+                                <li>You have control over your account information and preferences</li>
+                                <li>We use industry-standard security measures to protect your data</li>
+                            </ul>
+                            <p>For detailed information about our privacy practices, please contact our support team.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="policy-card">
+                        <h3 class="policy-title">Refund Policy</h3>
+                        <div class="policy-content">
+                            <p>We strive to provide the best service possible, but if you're not satisfied, here's our
+                                refund policy:</p>
+                            <ul>
+                                <li>7-day money-back guarantee for new subscriptions</li>
+                                <li>Refund requests must be submitted through our support system</li>
+                                <li>Refunds are processed within 5-7 business days</li>
+                                <li>Service issues must be verified by our technical team</li>
+                                <li>No refunds for violations of our terms of service</li>
+                            </ul>
+                            <p>To request a refund, please contact our support team with your account details and reason
+                                for the request.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <div class="team-header text-center">
+                <h2 class="team-main-title">Meet Our <span class="gradient-text">Leadership Team</span></h2>
+                <p class="team-main-subtitle">Driven by excellence, united by passion. Our experienced leadership team
+                    is dedicated to delivering unparalleled streaming entertainment to millions worldwide.</p>
+                <div class="title-underline"></div>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <!-- Team Member 1 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-member-card">
+                        <div class="team-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80"
+                                alt="Alex Johnson" class="team-member-img">
+                            <div class="team-overlay">
+                                <div class="team-social">
+                                    <a href="#" class="social-link" aria-label="LinkedIn"><i
+                                            class="fab fa-linkedin-in"></i></a>
+                                    <a href="#" class="social-link" aria-label="Twitter"><i
+                                            class="fab fa-twitter"></i></a>
+                                    <a href="#" class="social-link" aria-label="Email"><i
+                                            class="fas fa-envelope"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-member-content">
+                            <h3 class="team-member-name">Alex Johnson</h3>
+                            <p class="team-member-position">Chief Executive Officer</p>
+                            <div class="position-line"></div>
+                            <p class="team-member-bio">Visionary leader with 15+ years in digital media, pioneering
+                                innovative streaming solutions that redefine entertainment accessibility.</p>
+                            <div class="expertise-tags">
+                                <span class="expertise-tag">Strategy</span>
+                                <span class="expertise-tag">Innovation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-member-card">
+                        <div class="team-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80"
+                                alt="Sarah Chen" class="team-member-img">
+                            <div class="team-overlay">
+                                <div class="team-social">
+                                    <a href="#" class="social-link" aria-label="LinkedIn"><i
+                                            class="fab fa-linkedin-in"></i></a>
+                                    <a href="#" class="social-link" aria-label="Twitter"><i
+                                            class="fab fa-twitter"></i></a>
+                                    <a href="#" class="social-link" aria-label="Email"><i
+                                            class="fas fa-envelope"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-member-content">
+                            <h3 class="team-member-name">Sarah Chen</h3>
+                            <p class="team-member-position">Chief Technology Officer</p>
+                            <div class="position-line"></div>
+                            <p class="team-member-bio">Technology architect ensuring seamless, high-quality streaming
+                                infrastructure that scales to deliver flawless experiences globally.</p>
+                            <div class="expertise-tags">
+                                <span class="expertise-tag">Infrastructure</span>
+                                <span class="expertise-tag">Security</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-member-card">
+                        <div class="team-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
+                                alt="Michael Rodriguez" class="team-member-img">
+                            <div class="team-overlay">
+                                <div class="team-social">
+                                    <a href="#" class="social-link" aria-label="LinkedIn"><i
+                                            class="fab fa-linkedin-in"></i></a>
+                                    <a href="#" class="social-link" aria-label="Twitter"><i
+                                            class="fab fa-twitter"></i></a>
+                                    <a href="#" class="social-link" aria-label="Email"><i
+                                            class="fas fa-envelope"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-member-content">
+                            <h3 class="team-member-name">Michael Rodriguez</h3>
+                            <p class="team-member-position">Head of Content Strategy</p>
+                            <div class="position-line"></div>
+                            <p class="team-member-bio">Content curator with impeccable taste, assembling premium channel
+                                lineups that captivate audiences across diverse demographics.</p>
+                            <div class="expertise-tags">
+                                <span class="expertise-tag">Curation</span>
+                                <span class="expertise-tag">Partnerships</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 4 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-member-card">
+                        <div class="team-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=922&q=80"
+                                alt="Jessica Williams" class="team-member-img">
+                            <div class="team-overlay">
+                                <div class="team-social">
+                                    <a href="#" class="social-link" aria-label="LinkedIn"><i
+                                            class="fab fa-linkedin-in"></i></a>
+                                    <a href="#" class="social-link" aria-label="Twitter"><i
+                                            class="fab fa-twitter"></i></a>
+                                    <a href="#" class="social-link" aria-label="Email"><i
+                                            class="fas fa-envelope"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-member-content">
+                            <h3 class="team-member-name">Jessica Williams</h3>
+                            <p class="team-member-position">Director of Customer Excellence</p>
+                            <div class="position-line"></div>
+                            <p class="team-member-bio">Customer advocate leading our 24/7 support teams, ensuring every
+                                interaction exceeds expectations with professionalism and care.</p>
+                            <div class="expertise-tags">
+                                <span class="expertise-tag">Support</span>
+                                <span class="expertise-tag">Operations</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .team-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, var(--dark-bg) 0%, #0a0a0a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(29, 185, 84, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(29, 185, 84, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .team-header {
+            margin-bottom: 70px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-main-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, #17a34a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .team-main-subtitle {
+            font-size: 1.15rem;
+            color: var(--light-gray);
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+
+        .title-underline {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        .team-member-card {
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            height: 100%;
+            position: relative;
+        }
+
+        .team-member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), #17a34a);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .team-member-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .team-member-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(29, 185, 84, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(29, 185, 84, 0.1);
+        }
+
+        .team-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 280px;
+        }
+
+        .team-member-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            filter: grayscale(20%);
+        }
+
+        .team-member-card:hover .team-member-img {
+            transform: scale(1.08);
+            filter: grayscale(0%);
+        }
+
+        .team-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 30px;
+        }
+
+        .team-member-card:hover .team-overlay {
+            opacity: 1;
+        }
+
+        .team-social {
+            display: flex;
+            gap: 15px;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .team-member-card:hover .team-social {
+            transform: translateY(0);
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.4);
+            color: var(--white);
+        }
+
+        .team-member-content {
+            padding: 30px 25px;
+        }
+
+        .team-member-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .team-member-position {
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .position-line {
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            margin-bottom: 15px;
+        }
+
+        .team-member-bio {
+            font-size: 0.95rem;
+            color: var(--light-gray);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .expertise-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .expertise-tag {
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            background: rgba(29, 185, 84, 0.1);
+            border: 1px solid rgba(29, 185, 84, 0.3);
+            border-radius: 15px;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 991px) {
+            .team-main-title {
+                font-size: 2.5rem;
+            }
+
+            .team-section {
+                padding: 70px 0;
+            }
+
+            .team-header {
+                margin-bottom: 50px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .team-main-title {
+                font-size: 2rem;
+            }
+
+            .team-main-subtitle {
+                font-size: 1rem;
+            }
+
+            .team-image-wrapper {
+                height: 250px;
+            }
+
+            .team-member-content {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <a href="index.html" class="footer-logo">StreamZone</a>
+                    <p class="footer-description">
+                        StreamZone is a premium IPTV service provider offering thousands of live TV channels, on-demand
+                        content, and premium features for an unparalleled entertainment experience.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <div class="footer-links">
+                        <h5>Quick Links</h5>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="plans.html">Plans</a></li>
+                            <li><a href="channels.html">Channels</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <div class="footer-links">
+                        <h5>Support</h5>
+                        <ul>
+                            <li><a href="faq.html">FAQ</a></li>
+                            <li><a href="tutorials.html">Setup Tutorials</a></li>
+                            <li><a href="devices.html">Supported Devices</a></li>
+                            <li><a href="refund.html">Refund Policy</a></li>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <div class="footer-links">
+                        <h5>Contact Info</h5>
+                        <ul>
+                            <li><i class="fas fa-envelope me-2"></i> support@streamzone.com</li>
+                            <li><i class="fab fa-whatsapp me-2"></i> +1 (555) 123-4567</li>
+                            <li><i class="fab fa-telegram me-2"></i> @streamzonesupport</li>
+                            <li><i class="fas fa-globe me-2"></i> www.streamzone.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 StreamZone. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/15551234567" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scroll to Top -->
+    <div class="scroll-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Authentication Utilities -->
+    <script src="js/auth.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Navbar background on scroll
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 100) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+
+            // Scroll to top button visibility
+            if (window.scrollY > 300) {
+                document.querySelector('.scroll-to-top').classList.add('active');
+            } else {
+                document.querySelector('.scroll-to-top').classList.remove('active');
+            }
+        });
+
+        // Scroll to top functionality
+        document.querySelector('.scroll-to-top').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Simulate user authentication check
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if user is logged in (for demo purposes)
+            const isLoggedIn = localStorage.getItem('streamzone_user');
+
+            if (isLoggedIn) {
+                const user = JSON.parse(isLoggedIn);
+                const loginLink = document.querySelector('a[href="login.html"]');
+                if (loginLink) {
+                    loginLink.textContent = 'Dashboard';
+                    loginLink.href = 'dashboard.html';
+                }
+
+                const signupButton = document.querySelector('a[href="signup.html"].btn-primary');
+                if (signupButton) {
+                    signupButton.textContent = 'Dashboard';
+                    signupButton.href = 'dashboard.html';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

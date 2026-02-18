@@ -1,0 +1,2322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamZone - Billing & Payments</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1DB954;
+            --primary-dark: #1aa34a;
+            --dark: #0e0e0e;
+            --dark-secondary: #1a1a1a;
+            --gray: #2a2a2a;
+            --light-gray: #b3b3b3;
+            --white: #ffffff;
+            --orange: #ff9800;
+            --red: #f44336;
+            --blue: #2196F3;
+            --purple: #9C27B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: var(--dark-secondary);
+            min-height: 100vh;
+            padding: 20px 0;
+            position: fixed;
+            width: 280px;
+            border-right: 1px solid var(--gray);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: var(--gray);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-menu i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .menu-badge {
+            margin-left: auto;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background-color: var(--dark-secondary);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .header h1 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .notification-bell {
+            position: relative;
+            margin-right: 20px;
+            font-size: 1.3rem;
+            color: var(--light-gray);
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--red);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--dark-secondary);
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background-color: var(--gray);
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--gray);
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            text-align: center;
+            padding: 25px 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--blue));
+        }
+
+        .stats-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stats-label {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .stats-trend {
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .trend-up {
+            color: var(--primary);
+        }
+
+        .trend-down {
+            color: var(--red);
+        }
+
+        /* Tables */
+        .table {
+            color: var(--white);
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: var(--gray);
+            border-color: var(--gray);
+            font-weight: 600;
+            padding: 15px;
+        }
+
+        .table td {
+            border-color: var(--gray);
+            vertical-align: middle;
+            padding: 15px;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-paid {
+            background-color: rgba(29, 185, 84, 0.2);
+            color: var(--primary);
+        }
+
+        .status-pending {
+            background-color: rgba(255, 152, 0, 0.2);
+            color: var(--orange);
+        }
+
+        .status-failed {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--red);
+        }
+
+        .status-refunded {
+            background-color: rgba(156, 39, 176, 0.2);
+            color: var(--purple);
+        }
+
+        /* Payment Method Badges */
+        .method-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .method-paypal {
+            background-color: rgba(0, 48, 135, 0.2);
+            color: #0070ba;
+        }
+
+        .method-stripe {
+            background-color: rgba(85, 93, 219, 0.2);
+            color: #635bff;
+        }
+
+        .method-crypto {
+            background-color: rgba(247, 147, 26, 0.2);
+            color: #f7931a;
+        }
+
+        .method-bank {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: var(--blue);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        .btn-edit {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: var(--blue);
+            border: none;
+        }
+
+        .btn-edit:hover {
+            background-color: var(--blue);
+            color: white;
+        }
+
+        .btn-refund {
+            background-color: rgba(156, 39, 176, 0.2);
+            color: var(--purple);
+            border: none;
+        }
+
+        .btn-refund:hover {
+            background-color: var(--purple);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--red);
+            border: none;
+        }
+
+        .btn-delete:hover {
+            background-color: var(--red);
+            color: white;
+        }
+
+        .btn-approve {
+            background-color: rgba(29, 185, 84, 0.2);
+            color: var(--primary);
+            border: none;
+        }
+
+        .btn-approve:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.3);
+        }
+
+        /* Forms */
+        .form-control {
+            background-color: var(--gray);
+            border: 1px solid var(--gray);
+            color: var(--white);
+            border-radius: 6px;
+            padding: 10px 15px;
+        }
+
+        .form-control:focus {
+            background-color: var(--gray);
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25);
+        }
+
+        /* Search and Filter */
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-gray);
+        }
+
+        .search-box input {
+            padding-left: 40px;
+        }
+
+        .filter-section {
+            background-color: var(--dark-secondary);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            background-color: var(--gray);
+            color: var(--white);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background-color: var(--primary);
+        }
+
+        /* Pagination */
+        .page-link {
+            background-color: var(--gray);
+            border: 1px solid var(--gray);
+            color: var(--white);
+        }
+
+        .page-link:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Modal */
+        .modal-content {
+            background-color: var(--dark-secondary);
+            color: var(--white);
+            border: 1px solid var(--gray);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--gray);
+        }
+
+        /* Payment Info */
+        .payment-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .payment-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Amount Display */
+        .amount {
+            font-weight: 700;
+        }
+
+        .amount-positive {
+            color: var(--primary);
+        }
+
+        .amount-negative {
+            color: var(--red);
+        }
+
+        /* Invoice Status */
+        .invoice-status {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-paid .status-indicator {
+            background-color: var(--primary);
+        }
+
+        .status-pending .status-indicator {
+            background-color: var(--orange);
+        }
+
+        .status-failed .status-indicator {
+            background-color: var(--red);
+        }
+
+        .status-refunded .status-indicator {
+            background-color: var(--purple);
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Tabs */
+        .nav-tabs {
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--light-gray);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: transparent;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-brand span,
+            .sidebar-menu span,
+            .menu-badge {
+                display: none;
+            }
+
+            .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .user-info {
+                margin-top: 15px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown .btn {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .profile-dropdown .btn:focus {
+            box-shadow: none;
+        }
+
+        .profile-btn .user-info {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: var(--gray);
+        }
+
+        .profile-btn:hover .user-info {
+            background-color: var(--primary);
+        }
+
+        .profile-btn .user-avatar {
+            width: 38px;
+            height: 38px;
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+
+        .profile-btn .user-details {
+            text-align: left;
+        }
+
+        .profile-btn .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--white);
+        }
+
+        .profile-btn .text-muted {
+            font-size: 0.75rem;
+        }
+
+        .profile-btn .fa-chevron-down {
+            font-size: 0.75rem;
+            color: var(--light-gray);
+            margin-left: 8px;
+        }
+
+        .profile-menu {
+            background-color: var(--dark-secondary);
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            padding: 0;
+            min-width: 220px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
+        }
+
+        .profile-menu .dropdown-header {
+            background-color: var(--gray);
+            color: var(--white);
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .profile-menu .profile-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .profile-menu .dropdown-item {
+            color: var(--white);
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-menu .dropdown-item:hover {
+            background-color: var(--gray);
+            color: var(--primary);
+        }
+
+        .profile-menu .dropdown-item.text-danger:hover {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+        }
+
+        /* Profile Dropdown - Higher z-index to appear above notification */
+        .profile-dropdown .dropdown-menu {
+            z-index: 1060;
+        }
+
+        .notification-dropdown .dropdown-menu {
+            z-index: 1055;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-satellite-dish me-2"></i>
+            <span>StreamZone Pro</span>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a href="admin_dashboard.html">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="Dashboard_customers.html">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </a>
+            </li>
+            <li>
+                <a href="Dashboard_linemanagers.html">
+                    <i class="fas fa-satellite-dish"></i>
+                    <span>Lines Manager</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="active">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Billing & Payments</span>
+                </a>
+            </li>
+            <li>
+                <a href="Servers.html">
+                    <i class="fas fa-server"></i>
+                    <span>Servers</span>
+                </a>
+            </li>
+            <li>
+                <a href="Dashboard_analytics.html">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="logout(); return false;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-credit-card"></i> Billing & Payments</h1>
+            <div class="d-flex align-items-center">
+                <!-- Notification Section -->
+                <div class="dropdown notification-dropdown">
+                    <button class="btn notification-btn" type="button" id="notificationDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="notification-bell">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">12</span>
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu notification-menu" aria-labelledby="notificationDropdown">
+                        <li class="dropdown-header">
+                            <i class="fas fa-bell me-2"></i>Notifications
+                            <span class="badge bg-danger ms-2">12</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item notification-item" href="#">
+                                <div class="d-flex align-items-start">
+                                    <div class="notification-icon bg-success">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="ms-2">
+                                        <div class="notification-text">New customer registered</div>
+                                        <small class="text-muted">Alex Johnson - 10 min ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item notification-item" href="#">
+                                <div class="d-flex align-items-start">
+                                    <div class="notification-icon bg-primary">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="ms-2">
+                                        <div class="notification-text">Payment received</div>
+                                        <small class="text-muted">$24.99 - Sarah Smith</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-center text-primary" href="#">View All Notifications</a></li>
+                    </ul>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="dropdown profile-dropdown">
+                    <button class="btn profile-btn" type="button" id="profileDropdown" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="user-details">
+                                <div class="user-name">Admin User</div>
+                                <small class="text-muted">Super Administrator</small>
+                            </div>
+                            <i class="fas fa-chevron-down ms-2"></i>
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu profile-menu" aria-labelledby="profileDropdown">
+                        <li class="dropdown-header">
+                            <div class="d-flex align-items-center">
+                                <div class="profile-avatar">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <div class="fw-bold">Admin User</div>
+                                    <small class="text-muted">admin@streamzone.com</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user me-2"></i>My Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-lock me-2"></i>Change Password
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-icon text-primary">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stats-number">$24,582</div>
+                    <div class="stats-label">Total Revenue</div>
+                    <div class="stats-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> 12.5% from last month
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-icon text-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stats-number">1,087</div>
+                    <div class="stats-label">Successful Payments</div>
+                    <div class="stats-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> 8.3% from last month
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-icon text-warning">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stats-number">42</div>
+                    <div class="stats-label">Pending Payments</div>
+                    <div class="stats-trend trend-down">
+                        <i class="fas fa-arrow-down"></i> 5.2% from last week
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-icon text-danger">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stats-number">18</div>
+                    <div class="stats-label">Failed Payments</div>
+                    <div class="stats-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> 3.7% from last month
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="billingTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="payments-tab" data-bs-toggle="tab"
+                            data-bs-target="#payments" type="button" role="tab" aria-controls="payments"
+                            aria-selected="true">
+                            <i class="fas fa-credit-card me-2"></i> Payments
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="invoices-tab" data-bs-toggle="tab" data-bs-target="#invoices"
+                            type="button" role="tab" aria-controls="invoices" aria-selected="false">
+                            <i class="fas fa-file-invoice me-2"></i> Invoices
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="subscriptions-tab" data-bs-toggle="tab"
+                            data-bs-target="#subscriptions" type="button" role="tab" aria-controls="subscriptions"
+                            aria-selected="false">
+                            <i class="fas fa-sync-alt me-2"></i> Subscriptions
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="billingTabsContent">
+                    <!-- Payments Tab -->
+                    <div class="tab-pane fade show active" id="payments" role="tabpanel" aria-labelledby="payments-tab">
+                        <!-- Actions Row -->
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <div class="filter-section">
+                                    <h5 class="filter-title">Filter Payments</h5>
+                                    <div class="filter-options">
+                                        <button class="filter-btn active" data-filter="all">All Payments</button>
+                                        <button class="filter-btn" data-filter="paid">Paid</button>
+                                        <button class="filter-btn" data-filter="pending">Pending</button>
+                                        <button class="filter-btn" data-filter="failed">Failed</button>
+                                        <button class="filter-btn" data-filter="refunded">Refunded</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex gap-2">
+                                    <div class="search-box flex-grow-1">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" class="form-control" id="searchInput"
+                                            placeholder="Search payments...">
+                                    </div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#addPaymentModal">
+                                        <i class="fas fa-plus-circle"></i> Add Payment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payments Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="paymentsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Payment ID</th>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Method</th>
+                                        <th>Status</th>
+                                        <th>Invoice</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="paymentsTableBody">
+                                    <!-- Payments data will be loaded here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div id="paginationInfo">Showing 1 to 10 of 1,254 entries</div>
+                            <nav>
+                                <ul class="pagination mb-0" id="pagination">
+                                    <!-- Pagination will be generated by JavaScript -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <!-- Invoices Tab -->
+                    <div class="tab-pane fade" id="invoices" role="tabpanel" aria-labelledby="invoices-tab">
+                        <!-- Actions Row -->
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <div class="filter-section">
+                                    <h5 class="filter-title">Filter Invoices</h5>
+                                    <div class="filter-options">
+                                        <button class="filter-btn active" data-filter="all">All Invoices</button>
+                                        <button class="filter-btn" data-filter="paid">Paid</button>
+                                        <button class="filter-btn" data-filter="pending">Pending</button>
+                                        <button class="filter-btn" data-filter="overdue">Overdue</button>
+                                        <button class="filter-btn" data-filter="draft">Draft</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex gap-2">
+                                    <div class="search-box flex-grow-1">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" class="form-control" id="invoiceSearchInput"
+                                            placeholder="Search invoices...">
+                                    </div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#createInvoiceModal">
+                                        <i class="fas fa-plus-circle"></i> Create Invoice
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Invoices Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="invoicesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice #</th>
+                                        <th>Customer</th>
+                                        <th>Issue Date</th>
+                                        <th>Due Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoicesTableBody">
+                                    <!-- Invoices data will be loaded here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div id="invoicePaginationInfo">Showing 1 to 10 of 542 entries</div>
+                            <nav>
+                                <ul class="pagination mb-0" id="invoicePagination">
+                                    <!-- Pagination will be generated by JavaScript -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <!-- Subscriptions Tab -->
+                    <div class="tab-pane fade" id="subscriptions" role="tabpanel" aria-labelledby="subscriptions-tab">
+                        <!-- Actions Row -->
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <div class="filter-section">
+                                    <h5 class="filter-title">Filter Subscriptions</h5>
+                                    <div class="filter-options">
+                                        <button class="filter-btn active" data-filter="all">All Subscriptions</button>
+                                        <button class="filter-btn" data-filter="active">Active</button>
+                                        <button class="filter-btn" data-filter="expired">Expired</button>
+                                        <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+                                        <button class="filter-btn" data-filter="pending">Pending Renewal</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex gap-2">
+                                    <div class="search-box flex-grow-1">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" class="form-control" id="subscriptionSearchInput"
+                                            placeholder="Search subscriptions...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subscriptions Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="subscriptionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Subscription ID</th>
+                                        <th>Customer</th>
+                                        <th>Plan</th>
+                                        <th>Start Date</th>
+                                        <th>Renewal Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subscriptionsTableBody">
+                                    <!-- Subscriptions data will be loaded here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div id="subscriptionPaginationInfo">Showing 1 to 10 of 856 entries</div>
+                            <nav>
+                                <ul class="pagination mb-0" id="subscriptionPagination">
+                                    <!-- Pagination will be generated by JavaScript -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Chart -->
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Revenue Overview</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-money-check me-2"></i>Payment Methods</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>PayPal</span>
+                                <span>42%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 42%; background-color: #0070ba;"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Stripe</span>
+                                <span>35%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 35%; background-color: #635bff;"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Crypto</span>
+                                <span>15%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 15%; background-color: #f7931a;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Bank Transfer</span>
+                                <span>8%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 8%; background-color: #2196F3;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Payment Modal -->
+    <div class="modal fade" id="addPaymentModal" tabindex="-1" aria-labelledby="addPaymentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPaymentModalLabel">Add Manual Payment</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addPaymentForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="paymentCustomer" class="form-label">Customer</label>
+                                <select class="form-select" id="paymentCustomer" required>
+                                    <option value="">Select Customer</option>
+                                    <option value="1001">John Doe (john_iptv)</option>
+                                    <option value="1002">Sarah Smith (sarah_stream)</option>
+                                    <option value="1005">Robert Brown (robert_iptv)</option>
+                                    <option value="1007">David Miller (david_tv)</option>
+                                    <option value="1010">Maria Thomas (maria_tv)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="paymentAmount" class="form-label">Amount</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="paymentAmount" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="paymentMethod" class="form-label">Payment Method</label>
+                                <select class="form-select" id="paymentMethod" required>
+                                    <option value="">Select Method</option>
+                                    <option value="paypal">PayPal</option>
+                                    <option value="stripe">Stripe</option>
+                                    <option value="crypto">Cryptocurrency</option>
+                                    <option value="bank">Bank Transfer</option>
+                                    <option value="cash">Cash</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="paymentDate" class="form-label">Payment Date</label>
+                                <input type="date" class="form-control" id="paymentDate" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="paymentStatus" class="form-label">Status</label>
+                                <select class="form-select" id="paymentStatus" required>
+                                    <option value="paid">Paid</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="failed">Failed</option>
+                                    <option value="refunded">Refunded</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="paymentInvoice" class="form-label">Invoice # (Optional)</label>
+                                <input type="text" class="form-control" id="paymentInvoice">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paymentNotes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="paymentNotes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="savePaymentBtn">Save Payment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Invoice Modal -->
+    <div class="modal fade" id="createInvoiceModal" tabindex="-1" aria-labelledby="createInvoiceModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createInvoiceModalLabel">Create New Invoice</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createInvoiceForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="invoiceCustomer" class="form-label">Customer</label>
+                                <select class="form-select" id="invoiceCustomer" required>
+                                    <option value="">Select Customer</option>
+                                    <option value="1001">John Doe (john_iptv)</option>
+                                    <option value="1002">Sarah Smith (sarah_stream)</option>
+                                    <option value="1005">Robert Brown (robert_iptv)</option>
+                                    <option value="1007">David Miller (david_tv)</option>
+                                    <option value="1010">Maria Thomas (maria_tv)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="invoiceAmount" class="form-label">Amount</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="invoiceAmount" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="invoiceIssueDate" class="form-label">Issue Date</label>
+                                <input type="date" class="form-control" id="invoiceIssueDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="invoiceDueDate" class="form-label">Due Date</label>
+                                <input type="date" class="form-control" id="invoiceDueDate" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="invoiceStatus" class="form-label">Status</label>
+                                <select class="form-select" id="invoiceStatus" required>
+                                    <option value="draft">Draft</option>
+                                    <option value="sent">Sent</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="overdue">Overdue</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="invoicePlan" class="form-label">Subscription Plan</label>
+                                <select class="form-select" id="invoicePlan" required>
+                                    <option value="">Select Plan</option>
+                                    <option value="basic">Basic - $9.99</option>
+                                    <option value="standard">Standard - $24.99</option>
+                                    <option value="premium">Premium - $69.99</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="invoiceDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="invoiceDescription" rows="3"
+                                required>IPTV Subscription Service</textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveInvoiceBtn">Create Invoice</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Sample payments data
+        let payments = [
+            {
+                id: 5001,
+                customerId: 1001,
+                customerName: "John Doe",
+                date: "2023-10-15",
+                amount: 69.99,
+                method: "paypal",
+                status: "paid",
+                invoice: "INV-2023-001",
+                notes: "Annual premium subscription"
+            },
+            {
+                id: 5002,
+                customerId: 1002,
+                customerName: "Sarah Smith",
+                date: "2023-10-14",
+                amount: 24.99,
+                method: "stripe",
+                status: "paid",
+                invoice: "INV-2023-002",
+                notes: "3-month standard plan"
+            },
+            {
+                id: 5003,
+                customerId: 1003,
+                customerName: "Mike Johnson",
+                date: "2023-10-13",
+                amount: 9.99,
+                method: "crypto",
+                status: "failed",
+                invoice: "INV-2023-003",
+                notes: "Payment failed - insufficient funds"
+            },
+            {
+                id: 5004,
+                customerId: 1004,
+                customerName: "Emma Wilson",
+                date: "2023-10-12",
+                amount: 69.99,
+                method: "bank",
+                status: "pending",
+                invoice: "INV-2023-004",
+                notes: "Awaiting bank transfer confirmation"
+            },
+            {
+                id: 5005,
+                customerId: 1005,
+                customerName: "Robert Brown",
+                date: "2023-10-11",
+                amount: 24.99,
+                method: "paypal",
+                status: "refunded",
+                invoice: "INV-2023-005",
+                notes: "Customer requested refund"
+            },
+            {
+                id: 5006,
+                customerId: 1006,
+                customerName: "Lisa Davis",
+                date: "2023-10-10",
+                amount: 9.99,
+                method: "stripe",
+                status: "paid",
+                invoice: "INV-2023-006",
+                notes: "Monthly basic plan"
+            },
+            {
+                id: 5007,
+                customerId: 1007,
+                customerName: "David Miller",
+                date: "2023-10-09",
+                amount: 69.99,
+                method: "paypal",
+                status: "paid",
+                invoice: "INV-2023-007",
+                notes: "Annual premium subscription"
+            },
+            {
+                id: 5008,
+                customerId: 1008,
+                customerName: "Jennifer Taylor",
+                date: "2023-10-08",
+                amount: 24.99,
+                method: "crypto",
+                status: "failed",
+                invoice: "INV-2023-008",
+                notes: "Transaction timeout"
+            },
+            {
+                id: 5009,
+                customerId: 1009,
+                customerName: "James Anderson",
+                date: "2023-10-07",
+                amount: 9.99,
+                method: "stripe",
+                status: "paid",
+                invoice: "INV-2023-009",
+                notes: "Monthly basic plan"
+            },
+            {
+                id: 5010,
+                customerId: 1010,
+                customerName: "Maria Thomas",
+                date: "2023-10-06",
+                amount: 69.99,
+                method: "bank",
+                status: "pending",
+                invoice: "INV-2023-010",
+                notes: "Bank transfer in process"
+            }
+        ];
+
+        // Sample invoices data
+        let invoices = [
+            {
+                id: "INV-2023-001",
+                customerId: 1001,
+                customerName: "John Doe",
+                issueDate: "2023-10-01",
+                dueDate: "2023-10-15",
+                amount: 69.99,
+                status: "paid",
+                plan: "premium"
+            },
+            {
+                id: "INV-2023-002",
+                customerId: 1002,
+                customerName: "Sarah Smith",
+                issueDate: "2023-10-01",
+                dueDate: "2023-10-14",
+                amount: 24.99,
+                status: "paid",
+                plan: "standard"
+            },
+            {
+                id: "INV-2023-003",
+                customerId: 1003,
+                customerName: "Mike Johnson",
+                issueDate: "2023-10-01",
+                dueDate: "2023-10-13",
+                amount: 9.99,
+                status: "overdue",
+                plan: "basic"
+            },
+            {
+                id: "INV-2023-004",
+                customerId: 1004,
+                customerName: "Emma Wilson",
+                issueDate: "2023-10-01",
+                dueDate: "2023-10-20",
+                amount: 69.99,
+                status: "pending",
+                plan: "premium"
+            },
+            {
+                id: "INV-2023-005",
+                customerId: 1005,
+                customerName: "Robert Brown",
+                issueDate: "2023-10-01",
+                dueDate: "2023-10-18",
+                amount: 24.99,
+                status: "paid",
+                plan: "standard"
+            }
+        ];
+
+        // Sample subscriptions data
+        let subscriptions = [
+            {
+                id: 7001,
+                customerId: 1001,
+                customerName: "John Doe",
+                plan: "premium",
+                startDate: "2023-01-15",
+                renewalDate: "2024-01-15",
+                amount: 69.99,
+                status: "active"
+            },
+            {
+                id: 7002,
+                customerId: 1002,
+                customerName: "Sarah Smith",
+                plan: "standard",
+                startDate: "2023-02-10",
+                renewalDate: "2024-02-10",
+                amount: 24.99,
+                status: "active"
+            },
+            {
+                id: 7003,
+                customerId: 1003,
+                customerName: "Mike Johnson",
+                plan: "basic",
+                startDate: "2023-03-05",
+                renewalDate: "2023-09-05",
+                amount: 9.99,
+                status: "expired"
+            },
+            {
+                id: 7004,
+                customerId: 1004,
+                customerName: "Emma Wilson",
+                plan: "premium",
+                startDate: "2023-01-20",
+                renewalDate: "2023-08-20",
+                amount: 69.99,
+                status: "expired"
+            },
+            {
+                id: 7005,
+                customerId: 1005,
+                customerName: "Robert Brown",
+                plan: "standard",
+                startDate: "2023-04-12",
+                renewalDate: "2023-10-12",
+                amount: 24.99,
+                status: "pending"
+            }
+        ];
+
+        // Pagination variables
+        let currentPage = 1;
+        let entriesPerPage = 10;
+        let filteredPayments = [...payments];
+        let filteredInvoices = [...invoices];
+        let filteredSubscriptions = [...subscriptions];
+        let currentFilter = 'all';
+
+        // DOM elements
+        const paymentsTableBody = document.getElementById('paymentsTableBody');
+        const invoicesTableBody = document.getElementById('invoicesTableBody');
+        const subscriptionsTableBody = document.getElementById('subscriptionsTableBody');
+        const pagination = document.getElementById('pagination');
+        const invoicePagination = document.getElementById('invoicePagination');
+        const subscriptionPagination = document.getElementById('subscriptionPagination');
+        const paginationInfo = document.getElementById('paginationInfo');
+        const invoicePaginationInfo = document.getElementById('invoicePaginationInfo');
+        const subscriptionPaginationInfo = document.getElementById('subscriptionPaginationInfo');
+        const searchInput = document.getElementById('searchInput');
+        const invoiceSearchInput = document.getElementById('invoiceSearchInput');
+        const subscriptionSearchInput = document.getElementById('subscriptionSearchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const savePaymentBtn = document.getElementById('savePaymentBtn');
+        const saveInvoiceBtn = document.getElementById('saveInvoiceBtn');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            renderPaymentsTable();
+            renderInvoicesTable();
+            renderSubscriptionsTable();
+            setupEventListeners();
+            initializeRevenueChart();
+        });
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Search inputs
+            searchInput.addEventListener('input', function () {
+                filterPayments();
+                currentPage = 1;
+                renderPaymentsTable();
+            });
+
+            invoiceSearchInput.addEventListener('input', function () {
+                filterInvoices();
+                currentPage = 1;
+                renderInvoicesTable();
+            });
+
+            subscriptionSearchInput.addEventListener('input', function () {
+                filterSubscriptions();
+                currentPage = 1;
+                renderSubscriptionsTable();
+            });
+
+            // Filter buttons
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+
+                    // Apply filter based on active tab
+                    const activeTab = document.querySelector('#billingTabs .nav-link.active').id;
+                    if (activeTab === 'payments-tab') {
+                        filterPayments();
+                        currentPage = 1;
+                        renderPaymentsTable();
+                    } else if (activeTab === 'invoices-tab') {
+                        filterInvoices();
+                        currentPage = 1;
+                        renderInvoicesTable();
+                    } else if (activeTab === 'subscriptions-tab') {
+                        filterSubscriptions();
+                        currentPage = 1;
+                        renderSubscriptionsTable();
+                    }
+                });
+            });
+
+            // Save payment button
+            savePaymentBtn.addEventListener('click', addPayment);
+
+            // Save invoice button
+            saveInvoiceBtn.addEventListener('click', createInvoice);
+
+            // Set today's date as default for forms
+            document.getElementById('paymentDate').valueAsDate = new Date();
+            document.getElementById('invoiceIssueDate').valueAsDate = new Date();
+
+            // Set due date to 14 days from today
+            const dueDate = new Date();
+            dueDate.setDate(dueDate.getDate() + 14);
+            document.getElementById('invoiceDueDate').valueAsDate = dueDate;
+        }
+
+        // Filter payments based on search and filter
+        function filterPayments() {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            filteredPayments = payments.filter(payment => {
+                const matchesSearch =
+                    payment.customerName.toLowerCase().includes(searchTerm) ||
+                    payment.id.toString().includes(searchTerm) ||
+                    payment.invoice.toLowerCase().includes(searchTerm);
+
+                const matchesFilter = currentFilter === 'all' || payment.status === currentFilter;
+
+                return matchesSearch && matchesFilter;
+            });
+        }
+
+        // Filter invoices based on search and filter
+        function filterInvoices() {
+            const searchTerm = invoiceSearchInput.value.toLowerCase();
+
+            filteredInvoices = invoices.filter(invoice => {
+                const matchesSearch =
+                    invoice.customerName.toLowerCase().includes(searchTerm) ||
+                    invoice.id.toLowerCase().includes(searchTerm);
+
+                const matchesFilter = currentFilter === 'all' || invoice.status === currentFilter;
+
+                return matchesSearch && matchesFilter;
+            });
+        }
+
+        // Filter subscriptions based on search and filter
+        function filterSubscriptions() {
+            const searchTerm = subscriptionSearchInput.value.toLowerCase();
+
+            filteredSubscriptions = subscriptions.filter(subscription => {
+                const matchesSearch =
+                    subscription.customerName.toLowerCase().includes(searchTerm) ||
+                    subscription.id.toString().includes(searchTerm);
+
+                const matchesFilter = currentFilter === 'all' || subscription.status === currentFilter;
+
+                return matchesSearch && matchesFilter;
+            });
+        }
+
+        // Render payments table
+        function renderPaymentsTable() {
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * entriesPerPage;
+            const endIndex = Math.min(startIndex + entriesPerPage, filteredPayments.length);
+            const pagePayments = filteredPayments.slice(startIndex, endIndex);
+
+            // Clear table body
+            paymentsTableBody.innerHTML = '';
+
+            // Add payments to table
+            pagePayments.forEach(payment => {
+                const row = document.createElement('tr');
+
+                // Determine status badge class
+                let statusBadgeClass = '';
+                switch (payment.status) {
+                    case 'paid':
+                        statusBadgeClass = 'status-paid';
+                        break;
+                    case 'pending':
+                        statusBadgeClass = 'status-pending';
+                        break;
+                    case 'failed':
+                        statusBadgeClass = 'status-failed';
+                        break;
+                    case 'refunded':
+                        statusBadgeClass = 'status-refunded';
+                        break;
+                }
+
+                // Determine method badge class
+                let methodBadgeClass = '';
+                switch (payment.method) {
+                    case 'paypal':
+                        methodBadgeClass = 'method-paypal';
+                        break;
+                    case 'stripe':
+                        methodBadgeClass = 'method-stripe';
+                        break;
+                    case 'crypto':
+                        methodBadgeClass = 'method-crypto';
+                        break;
+                    case 'bank':
+                        methodBadgeClass = 'method-bank';
+                        break;
+                }
+
+                row.innerHTML = `
+                    <td>${payment.id}</td>
+                    <td>
+                        <div class="payment-info">
+                            <div class="payment-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <div>${payment.customerName}</div>
+                                <small class="text-muted">ID: ${payment.customerId}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${formatDate(payment.date)}</td>
+                    <td class="amount amount-positive">$${payment.amount.toFixed(2)}</td>
+                    <td><span class="method-badge ${methodBadgeClass}">${payment.method.charAt(0).toUpperCase() + payment.method.slice(1)}</span></td>
+                    <td>
+                        <div class="invoice-status status-${payment.status}">
+                            <div class="status-indicator"></div>
+                            <span class="status-badge ${statusBadgeClass}">${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}</span>
+                        </div>
+                    </td>
+                    <td>${payment.invoice}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-edit btn-sm" onclick="editPayment(${payment.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            ${payment.status === 'paid' ?
+                        `<button class="btn btn-refund btn-sm" onclick="refundPayment(${payment.id})">
+                                    <i class="fas fa-undo"></i>
+                                </button>` :
+                        ''
+                    }
+                            <button class="btn btn-delete btn-sm" onclick="deletePayment(${payment.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                paymentsTableBody.appendChild(row);
+            });
+
+            // Update pagination info
+            paginationInfo.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${filteredPayments.length} entries`;
+
+            // Render pagination
+            renderPagination(pagination, filteredPayments.length, currentPage, entriesPerPage, renderPaymentsTable);
+        }
+
+        // Render invoices table
+        function renderInvoicesTable() {
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * entriesPerPage;
+            const endIndex = Math.min(startIndex + entriesPerPage, filteredInvoices.length);
+            const pageInvoices = filteredInvoices.slice(startIndex, endIndex);
+
+            // Clear table body
+            invoicesTableBody.innerHTML = '';
+
+            // Add invoices to table
+            pageInvoices.forEach(invoice => {
+                const row = document.createElement('tr');
+
+                // Determine status badge class
+                let statusBadgeClass = '';
+                switch (invoice.status) {
+                    case 'paid':
+                        statusBadgeClass = 'status-paid';
+                        break;
+                    case 'pending':
+                        statusBadgeClass = 'status-pending';
+                        break;
+                    case 'overdue':
+                        statusBadgeClass = 'status-failed';
+                        break;
+                    case 'draft':
+                        statusBadgeClass = 'status-refunded';
+                        break;
+                }
+
+                row.innerHTML = `
+                    <td>${invoice.id}</td>
+                    <td>
+                        <div class="payment-info">
+                            <div class="payment-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <div>${invoice.customerName}</div>
+                                <small class="text-muted">ID: ${invoice.customerId}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${formatDate(invoice.issueDate)}</td>
+                    <td>${formatDate(invoice.dueDate)}</td>
+                    <td class="amount amount-positive">$${invoice.amount.toFixed(2)}</td>
+                    <td>
+                        <div class="invoice-status status-${invoice.status}">
+                            <div class="status-indicator"></div>
+                            <span class="status-badge ${statusBadgeClass}">${invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-edit btn-sm" onclick="editInvoice('${invoice.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-approve btn-sm" onclick="sendInvoice('${invoice.id}')">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button class="btn btn-delete btn-sm" onclick="deleteInvoice('${invoice.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                invoicesTableBody.appendChild(row);
+            });
+
+            // Update pagination info
+            invoicePaginationInfo.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${filteredInvoices.length} entries`;
+
+            // Render pagination
+            renderPagination(invoicePagination, filteredInvoices.length, currentPage, entriesPerPage, renderInvoicesTable);
+        }
+
+        // Render subscriptions table
+        function renderSubscriptionsTable() {
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * entriesPerPage;
+            const endIndex = Math.min(startIndex + entriesPerPage, filteredSubscriptions.length);
+            const pageSubscriptions = filteredSubscriptions.slice(startIndex, endIndex);
+
+            // Clear table body
+            subscriptionsTableBody.innerHTML = '';
+
+            // Add subscriptions to table
+            pageSubscriptions.forEach(subscription => {
+                const row = document.createElement('tr');
+
+                // Determine status badge class
+                let statusBadgeClass = '';
+                switch (subscription.status) {
+                    case 'active':
+                        statusBadgeClass = 'status-paid';
+                        break;
+                    case 'expired':
+                        statusBadgeClass = 'status-failed';
+                        break;
+                    case 'cancelled':
+                        statusBadgeClass = 'status-refunded';
+                        break;
+                    case 'pending':
+                        statusBadgeClass = 'status-pending';
+                        break;
+                }
+
+                // Determine plan badge class
+                let planBadgeClass = '';
+                switch (subscription.plan) {
+                    case 'basic':
+                        planBadgeClass = 'plan-basic';
+                        break;
+                    case 'standard':
+                        planBadgeClass = 'plan-standard';
+                        break;
+                    case 'premium':
+                        planBadgeClass = 'plan-premium';
+                        break;
+                }
+
+                row.innerHTML = `
+                    <td>${subscription.id}</td>
+                    <td>
+                        <div class="payment-info">
+                            <div class="payment-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <div>${subscription.customerName}</div>
+                                <small class="text-muted">ID: ${subscription.customerId}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="plan-badge ${planBadgeClass}">${subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1)}</span></td>
+                    <td>${formatDate(subscription.startDate)}</td>
+                    <td>${formatDate(subscription.renewalDate)}</td>
+                    <td class="amount amount-positive">$${subscription.amount.toFixed(2)}</td>
+                    <td>
+                        <div class="invoice-status status-${subscription.status}">
+                            <div class="status-indicator"></div>
+                            <span class="status-badge ${statusBadgeClass}">${subscription.status.charAt(0).toUpperCase() + subscription.status.slice(1)}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-edit btn-sm" onclick="editSubscription(${subscription.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-renew btn-sm" onclick="renewSubscription(${subscription.id})">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="btn btn-delete btn-sm" onclick="cancelSubscription(${subscription.id})">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                subscriptionsTableBody.appendChild(row);
+            });
+
+            // Update pagination info
+            subscriptionPaginationInfo.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${filteredSubscriptions.length} entries`;
+
+            // Render pagination
+            renderPagination(subscriptionPagination, filteredSubscriptions.length, currentPage, entriesPerPage, renderSubscriptionsTable);
+        }
+
+        // Render pagination
+        function renderPagination(paginationElement, totalItems, currentPage, entriesPerPage, renderFunction) {
+            const totalPages = Math.ceil(totalItems / entriesPerPage);
+
+            // Clear pagination
+            paginationElement.innerHTML = '';
+
+            // Previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" ${currentPage === 1 ? 'tabindex="-1" aria-disabled="true"' : ''}>Previous</a>`;
+            prevLi.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderFunction();
+                }
+            });
+            paginationElement.appendChild(prevLi);
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLi = document.createElement('li');
+                pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                pageLi.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                pageLi.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    currentPage = i;
+                    renderFunction();
+                });
+                paginationElement.appendChild(pageLi);
+            }
+
+            // Next button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" ${currentPage === totalPages ? 'tabindex="-1" aria-disabled="true"' : ''}>Next</a>`;
+            nextLi.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderFunction();
+                }
+            });
+            paginationElement.appendChild(nextLi);
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Add new payment
+        function addPayment() {
+            const customerId = document.getElementById('paymentCustomer').value;
+            const customerName = document.getElementById('paymentCustomer').options[document.getElementById('paymentCustomer').selectedIndex].text.split(' (')[0];
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+            const method = document.getElementById('paymentMethod').value;
+            const date = document.getElementById('paymentDate').value;
+            const status = document.getElementById('paymentStatus').value;
+            const invoice = document.getElementById('paymentInvoice').value;
+            const notes = document.getElementById('paymentNotes').value;
+
+            // Generate new ID
+            const newId = Math.max(...payments.map(p => p.id)) + 1;
+
+            // Generate invoice if not provided
+            const invoiceNumber = invoice || `INV-${new Date().getFullYear()}-${newId.toString().padStart(3, '0')}`;
+
+            // Add payment to array
+            const newPayment = {
+                id: newId,
+                customerId: parseInt(customerId),
+                customerName,
+                date,
+                amount,
+                method,
+                status,
+                invoice: invoiceNumber,
+                notes
+            };
+
+            payments.push(newPayment);
+
+            // Reset form and close modal
+            document.getElementById('addPaymentForm').reset();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addPaymentModal'));
+            modal.hide();
+
+            // Update UI
+            filterPayments();
+            renderPaymentsTable();
+
+            // Show success message
+            alert('Payment added successfully!');
+        }
+
+        // Create new invoice
+        function createInvoice() {
+            const customerId = document.getElementById('invoiceCustomer').value;
+            const customerName = document.getElementById('invoiceCustomer').options[document.getElementById('invoiceCustomer').selectedIndex].text.split(' (')[0];
+            const amount = parseFloat(document.getElementById('invoiceAmount').value);
+            const issueDate = document.getElementById('invoiceIssueDate').value;
+            const dueDate = document.getElementById('invoiceDueDate').value;
+            const status = document.getElementById('invoiceStatus').value;
+            const plan = document.getElementById('invoicePlan').value;
+            const description = document.getElementById('invoiceDescription').value;
+
+            // Generate new invoice ID
+            const newId = `INV-${new Date().getFullYear()}-${(invoices.length + 1).toString().padStart(3, '0')}`;
+
+            // Add invoice to array
+            const newInvoice = {
+                id: newId,
+                customerId: parseInt(customerId),
+                customerName,
+                issueDate,
+                dueDate,
+                amount,
+                status,
+                plan,
+                description
+            };
+
+            invoices.push(newInvoice);
+
+            // Reset form and close modal
+            document.getElementById('createInvoiceForm').reset();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('createInvoiceModal'));
+            modal.hide();
+
+            // Update UI
+            filterInvoices();
+            renderInvoicesTable();
+
+            // Show success message
+            alert('Invoice created successfully!');
+        }
+
+        // Edit payment
+        function editPayment(id) {
+            alert(`Edit payment ${id} - This functionality would open an edit modal`);
+        }
+
+        // Refund payment
+        function refundPayment(id) {
+            if (confirm('Are you sure you want to refund this payment?')) {
+                const payment = payments.find(p => p.id === id);
+                if (payment) {
+                    payment.status = 'refunded';
+                    filterPayments();
+                    renderPaymentsTable();
+                    alert('Payment refunded successfully!');
+                }
+            }
+        }
+
+        // Delete payment
+        function deletePayment(id) {
+            if (confirm('Are you sure you want to delete this payment record?')) {
+                payments = payments.filter(p => p.id !== id);
+                filterPayments();
+                renderPaymentsTable();
+                alert('Payment deleted successfully!');
+            }
+        }
+
+        // Edit invoice
+        function editInvoice(id) {
+            alert(`Edit invoice ${id} - This functionality would open an edit modal`);
+        }
+
+        // Send invoice
+        function sendInvoice(id) {
+            const invoice = invoices.find(i => i.id === id);
+            if (invoice) {
+                invoice.status = 'sent';
+                filterInvoices();
+                renderInvoicesTable();
+                alert(`Invoice ${id} sent to customer!`);
+            }
+        }
+
+        // Delete invoice
+        function deleteInvoice(id) {
+            if (confirm('Are you sure you want to delete this invoice?')) {
+                invoices = invoices.filter(i => i.id !== id);
+                filterInvoices();
+                renderInvoicesTable();
+                alert('Invoice deleted successfully!');
+            }
+        }
+
+        // Edit subscription
+        function editSubscription(id) {
+            alert(`Edit subscription ${id} - This functionality would open an edit modal`);
+        }
+
+        // Renew subscription
+        function renewSubscription(id) {
+            const subscription = subscriptions.find(s => s.id === id);
+            if (subscription) {
+                // Extend renewal date by 1 year
+                const currentDate = new Date(subscription.renewalDate);
+                currentDate.setFullYear(currentDate.getFullYear() + 1);
+                subscription.renewalDate = currentDate.toISOString().split('T')[0];
+                subscription.status = 'active';
+
+                filterSubscriptions();
+                renderSubscriptionsTable();
+                alert('Subscription renewed for 1 year!');
+            }
+        }
+
+        // Cancel subscription
+        function cancelSubscription(id) {
+            if (confirm('Are you sure you want to cancel this subscription?')) {
+                const subscription = subscriptions.find(s => s.id === id);
+                if (subscription) {
+                    subscription.status = 'cancelled';
+                    filterSubscriptions();
+                    renderSubscriptionsTable();
+                    alert('Subscription cancelled successfully!');
+                }
+            }
+        }
+
+        // Initialize revenue chart
+        function initializeRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            const revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: [18500, 19200, 20100, 21500, 22300, 21800, 23100, 24500, 23800, 25200, 24800, 26500],
+                        borderColor: '#1DB954',
+                        backgroundColor: 'rgba(29, 185, 84, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#b3b3b3'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#b3b3b3',
+                                callback: function (value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#b3b3b3'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+    <!-- Authentication Logic -->
+    <script src="auth.js"></script>
+    <script>
+        // Check authentication on load
+        requireAuth();
+    </script>
+</body>
+
+</html>

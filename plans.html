@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Plans - StreamZone IPTV</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1DB954;
+            --primary-dark: #1aa34a;
+            --dark: #0e0e0e;
+            --dark-secondary: #1a1a1a;
+            --gray: #2a2a2a;
+            --light-gray: #b3b3b3;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: rgba(14, 14, 14, 0.95);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            background-color: var(--dark);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary) !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--white) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary) !important;
+        }
+
+        .navbar-toggler {
+            border: none;
+            color: var(--white);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* Enhanced Navbar Auth Buttons */
+        .btn-nav-auth {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid;
+            margin-left: 10px;
+        }
+
+        .btn-nav-auth::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+            z-index: 0;
+        }
+
+        .btn-nav-auth:hover::before {
+            width: 250px;
+            height: 250px;
+        }
+
+        .btn-nav-auth i,
+        .btn-nav-auth span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-nav-signin {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-nav-signin:hover {
+            background: linear-gradient(135deg, var(--primary), #1aa34a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(29, 185, 84, 0.35);
+            border-color: transparent;
+            color: var(--white);
+        }
+
+        .btn-nav-signup {
+            background: linear-gradient(135deg, var(--primary), #17a34a);
+            border-color: transparent;
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(29, 185, 84, 0.25);
+        }
+
+        .btn-nav-signup:hover {
+            background: linear-gradient(135deg, #17a34a, #0f8239);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(29, 185, 84, 0.4);
+            color: var(--white);
+        }
+
+        @media (max-width: 991px) {
+            .btn-nav-auth {
+                margin: 10px 0;
+                justify-content: center;
+            }
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 150px 0 80px;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                url('https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--light-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        /* Plan Cards */
+        .plan-card {
+            background-color: var(--dark-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray);
+            height: 100%;
+            position: relative;
+        }
+
+        .plan-card.featured {
+            border: 2px solid var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(29, 185, 84, 0.2);
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .plan-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 8px 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transform: rotate(45deg);
+            z-index: 1;
+        }
+
+        .plan-header {
+            background-color: var(--gray);
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .plan-duration {
+            color: var(--light-gray);
+            font-size: 1rem;
+        }
+
+        .plan-savings {
+            color: var(--primary);
+            font-weight: 500;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .plan-body {
+            padding: 30px;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray);
+            color: var(--light-gray);
+            display: flex;
+            align-items: center;
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features li i {
+            color: var(--primary);
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(29, 185, 84, 0.2);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            background-color: var(--dark-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--gray);
+        }
+
+        .table {
+            margin-bottom: 0;
+            color: var(--white);
+        }
+
+        .table th {
+            background-color: var(--gray);
+            border: none;
+            padding: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .table td {
+            border: none;
+            padding: 15px 20px;
+            vertical-align: middle;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: rgba(42, 42, 42, 0.3);
+        }
+
+        .feature-name {
+            font-weight: 500;
+        }
+
+        .feature-value {
+            text-align: center;
+        }
+
+        .feature-value i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .feature-value .text-muted {
+            color: var(--light-gray) !important;
+        }
+
+        /* Payment Methods */
+        .payment-method {
+            background-color: var(--dark-secondary);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--gray);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .payment-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .payment-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* FAQ Section */
+        .faq-item {
+            background-color: var(--dark-secondary);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--gray);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--light-gray);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 500px;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-toggle {
+            transition: transform 0.3s ease;
+        }
+
+        /* Checkout Modal */
+        .modal-content {
+            background-color: var(--dark-secondary);
+            color: var(--white);
+            border-radius: 10px;
+            border: 1px solid var(--gray);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--gray);
+            padding: 20px;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--gray);
+            padding: 20px;
+        }
+
+        .btn-close {
+            filter: invert(1);
+        }
+
+        .form-control {
+            background-color: var(--dark);
+            border: 1px solid var(--gray);
+            color: var(--white);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: var(--dark);
+            border-color: var(--primary);
+            color: var(--white);
+            box-shadow: 0 0 0 0.25rem rgba(29, 185, 84, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: var(--light-gray);
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--light-gray);
+        }
+
+        .form-select {
+            background-color: var(--dark);
+            border: 1px solid var(--gray);
+            color: var(--white);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(29, 185, 84, 0.25);
+        }
+
+        .order-summary {
+            background-color: var(--dark);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--gray);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding-top: 10px;
+            border-top: 1px solid var(--gray);
+            margin-top: 10px;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1055;
+        }
+
+        .toast {
+            background-color: var(--dark-secondary);
+            color: var(--white);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+        }
+
+        .toast-header {
+            background-color: var(--dark);
+            color: var(--primary);
+            border-bottom: 1px solid var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-secondary);
+            padding: 60px 0 20px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-description {
+            color: var(--light-gray);
+            margin-bottom: 20px;
+        }
+
+        .footer-links h5 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links ul li a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--gray);
+            color: var(--white);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Scroll to Top */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 100px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px rgba(29, 185, 84, 0.3);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .plan-card.featured {
+                transform: scale(1);
+                margin-bottom: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .page-header {
+                padding: 130px 0 60px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .scroll-to-top {
+                right: 25px;
+                bottom: 90px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+
+            .plan-price {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">StreamZone</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="plans.html">Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="channels.html">Channels</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="btn-nav-auth btn-nav-signin" href="signin.html">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Sign In</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-nav-auth btn-nav-signup" href="signup.html">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Choose Your Plan</h1>
+            <p class="page-subtitle">Select the perfect IPTV subscription plan for your entertainment needs. All plans
+                include our premium features and 24/7 support.</p>
+        </div>
+    </section>
+
+    <!-- All Plans Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">All <span>Subscription Plans</span></h2>
+            <p class="text-center mb-5" style="color: var(--light-gray); max-width: 700px; margin: 0 auto;">Compare our
+                IPTV subscription plans and choose the one that fits your needs. All plans come with a 7-day money-back
+                guarantee.</p>
+
+            <div class="row">
+                <!-- Basic Plan -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <h3 class="plan-name">Basic</h3>
+                            <div class="plan-price">$9.99</div>
+                            <div class="plan-duration">1 Month</div>
+                        </div>
+                        <div class="plan-body">
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 8,000+ Live Channels</li>
+                                <li><i class="fas fa-check"></i> Standard Quality (SD/HD)</li>
+                                <li><i class="fas fa-check"></i> 1 Connection</li>
+                                <li><i class="fas fa-check"></i> 24/7 Customer Support</li>
+                                <li><i class="fas fa-times"></i> Video on Demand (VOD)</li>
+                                <li><i class="fas fa-times"></i> Catch-up TV</li>
+                                <li><i class="fas fa-times"></i> 4K Content</li>
+                                <li><i class="fas fa-times"></i> Premium Channels</li>
+                            </ul>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal"
+                                data-plan="Basic" data-price="9.99">Select Plan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Standard Plan -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="plan-card featured">
+                        <div class="plan-badge">Most Popular</div>
+                        <div class="plan-header">
+                            <h3 class="plan-name">Standard</h3>
+                            <div class="plan-price">$24.99</div>
+                            <div class="plan-duration">3 Months</div>
+                            <div class="plan-savings">Save 17%</div>
+                        </div>
+                        <div class="plan-body">
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 10,000+ Live Channels</li>
+                                <li><i class="fas fa-check"></i> HD Quality</li>
+                                <li><i class="fas fa-check"></i> 2 Connections</li>
+                                <li><i class="fas fa-check"></i> 24/7 Customer Support</li>
+                                <li><i class="fas fa-check"></i> Video on Demand (VOD)</li>
+                                <li><i class="fas fa-check"></i> Catch-up TV (7 days)</li>
+                                <li><i class="fas fa-times"></i> 4K Content</li>
+                                <li><i class="fas fa-check"></i> Premium Channels</li>
+                            </ul>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal"
+                                data-plan="Standard" data-price="24.99">Select Plan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <h3 class="plan-name">Premium</h3>
+                            <div class="plan-price">$69.99</div>
+                            <div class="plan-duration">12 Months</div>
+                            <div class="plan-savings">Save 42%</div>
+                        </div>
+                        <div class="plan-body">
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 15,000+ Live Channels</li>
+                                <li><i class="fas fa-check"></i> 4K & HD Quality</li>
+                                <li><i class="fas fa-check"></i> 4 Connections</li>
+                                <li><i class="fas fa-check"></i> 24/7 Customer Support</li>
+                                <li><i class="fas fa-check"></i> Full VOD Library</li>
+                                <li><i class="fas fa-check"></i> Catch-up TV (14 days)</li>
+                                <li><i class="fas fa-check"></i> 4K Content</li>
+                                <li><i class="fas fa-check"></i> All Premium Channels</li>
+                            </ul>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal"
+                                data-plan="Premium" data-price="69.99">Select Plan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Plans -->
+            <div class="row mt-4">
+                <!-- Family Plan -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <h3 class="plan-name">Family</h3>
+                            <div class="plan-price">$39.99</div>
+                            <div class="plan-duration">6 Months</div>
+                            <div class="plan-savings">Save 33%</div>
+                        </div>
+                        <div class="plan-body">
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 12,000+ Live Channels</li>
+                                <li><i class="fas fa-check"></i> HD Quality</li>
+                                <li><i class="fas fa-check"></i> 3 Connections</li>
+                                <li><i class="fas fa-check"></i> 24/7 Customer Support</li>
+                                <li><i class="fas fa-check"></i> Video on Demand (VOD)</li>
+                                <li><i class="fas fa-check"></i> Catch-up TV (7 days)</li>
+                                <li><i class="fas fa-times"></i> 4K Content</li>
+                                <li><i class="fas fa-check"></i> Premium Channels</li>
+                            </ul>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal"
+                                data-plan="Family" data-price="39.99">Select Plan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ultimate Plan -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <h3 class="plan-name">Ultimate</h3>
+                            <div class="plan-price">$119.99</div>
+                            <div class="plan-duration">24 Months</div>
+                            <div class="plan-savings">Save 50%</div>
+                        </div>
+                        <div class="plan-body">
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 20,000+ Live Channels</li>
+                                <li><i class="fas fa-check"></i> 4K & HD Quality</li>
+                                <li><i class="fas fa-check"></i> 5 Connections</li>
+                                <li><i class="fas fa-check"></i> 24/7 Customer Support</li>
+                                <li><i class="fas fa-check"></i> Full VOD Library</li>
+                                <li><i class="fas fa-check"></i> Catch-up TV (30 days)</li>
+                                <li><i class="fas fa-check"></i> 4K Content</li>
+                                <li><i class="fas fa-check"></i> All Premium Channels</li>
+                            </ul>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal"
+                                data-plan="Ultimate" data-price="119.99">Select Plan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trial Plan -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <h3 class="plan-name">Free Trial</h3>
+                            <div class="plan-price">$0.00</div>
+                            <div class="plan-duration">24 Hours</div>
+                        </div>
+                        <div class="plan-body">
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 5,000+ Live Channels</li>
+                                <li><i class="fas fa-check"></i> Standard Quality</li>
+                                <li><i class="fas fa-check"></i> 1 Connection</li>
+                                <li><i class="fas fa-check"></i> Basic Support</li>
+                                <li><i class="fas fa-times"></i> Video on Demand (VOD)</li>
+                                <li><i class="fas fa-times"></i> Catch-up TV</li>
+                                <li><i class="fas fa-times"></i> 4K Content</li>
+                                <li><i class="fas fa-times"></i> Premium Channels</li>
+                            </ul>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal"
+                                data-plan="Free Trial" data-price="0.00">Start Trial</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan Comparison Section -->
+    <section class="section" style="background-color: var(--dark-secondary);">
+        <div class="container">
+            <h2 class="section-title">Plan <span>Comparison</span></h2>
+            <p class="text-center mb-5" style="color: var(--light-gray); max-width: 700px; margin: 0 auto;">Compare all
+                features across our IPTV subscription plans to make the best choice for your entertainment needs.</p>
+
+            <div class="comparison-table">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Basic</th>
+                                <th>Standard</th>
+                                <th>Premium</th>
+                                <th>Family</th>
+                                <th>Ultimate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="feature-name">Live Channels</td>
+                                <td class="feature-value">8,000+</td>
+                                <td class="feature-value">10,000+</td>
+                                <td class="feature-value">15,000+</td>
+                                <td class="feature-value">12,000+</td>
+                                <td class="feature-value">20,000+</td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">Video Quality</td>
+                                <td class="feature-value">SD/HD</td>
+                                <td class="feature-value">HD</td>
+                                <td class="feature-value">4K & HD</td>
+                                <td class="feature-value">HD</td>
+                                <td class="feature-value">4K & HD</td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">Simultaneous Connections</td>
+                                <td class="feature-value">1</td>
+                                <td class="feature-value">2</td>
+                                <td class="feature-value">4</td>
+                                <td class="feature-value">3</td>
+                                <td class="feature-value">5</td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">Video on Demand</td>
+                                <td class="feature-value"><i class="fas fa-times text-muted"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">Catch-up TV</td>
+                                <td class="feature-value"><i class="fas fa-times text-muted"></i></td>
+                                <td class="feature-value">7 days</td>
+                                <td class="feature-value">14 days</td>
+                                <td class="feature-value">7 days</td>
+                                <td class="feature-value">30 days</td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">4K Content</td>
+                                <td class="feature-value"><i class="fas fa-times text-muted"></i></td>
+                                <td class="feature-value"><i class="fas fa-times text-muted"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-times text-muted"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">Premium Channels</td>
+                                <td class="feature-value"><i class="fas fa-times text-muted"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feature-name">24/7 Support</td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                                <td class="feature-value"><i class="fas fa-check"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Methods Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Accepted <span>Payment Methods</span></h2>
+            <p class="text-center mb-5" style="color: var(--light-gray); max-width: 700px; margin: 0 auto;">We accept
+                various payment methods to make your subscription process as convenient as possible.</p>
+
+            <div class="row">
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-paypal"></i>
+                        </div>
+                        <div class="payment-name">PayPal</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-visa"></i>
+                        </div>
+                        <div class="payment-name">Visa</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-mastercard"></i>
+                        </div>
+                        <div class="payment-name">Mastercard</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-amex"></i>
+                        </div>
+                        <div class="payment-name">Amex</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fab fa-bitcoin"></i>
+                        </div>
+                        <div class="payment-name">Bitcoin</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-discover"></i>
+                        </div>
+                        <div class="payment-name">Discover</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="payment-name">Bank Transfer</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-apple-pay"></i>
+                        </div>
+                        <div class="payment-name">Apple Pay</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" style="background-color: var(--dark-secondary);">
+        <div class="container">
+            <h2 class="section-title text-center">Plan <span>FAQ</span></h2>
+            <p class="text-center mb-5" style="color: var(--light-gray); max-width: 700px; margin: 0 auto;">Find answers
+                to common questions about our IPTV subscription plans and billing.</p>
+
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I change my plan after subscribing?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, you can upgrade your plan at any time. The new plan will be effective immediately, and
+                        you'll be charged the prorated difference for the remainder of your billing cycle. Downgrades
+                        will take effect at the start of your next billing cycle.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Do you offer refunds?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        We offer a 7-day money-back guarantee for all new subscriptions. If you're not satisfied with
+                        our service within the first 7 days, you can request a full refund. After 7 days, refunds are
+                        issued on a case-by-case basis for technical issues we cannot resolve.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How many devices can I use simultaneously?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        The number of simultaneous connections depends on your plan. Basic allows 1 connection, Standard
+                        allows 2, Family allows 3, Premium allows 4, and Ultimate allows 5 connections. You can use
+                        these connections on any compatible devices.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is there a contract or commitment?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        No, there are no contracts or long-term commitments. All our plans are month-to-month (or for
+                        the duration you select). You can cancel at any time, and your service will remain active until
+                        the end of your paid period.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Do you offer discounts for long-term subscriptions?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, we offer significant discounts for longer subscription periods. For example, our Premium
+                        plan offers 42% savings when you subscribe for 12 months compared to the monthly rate. The
+                        Ultimate plan offers 50% savings for a 24-month subscription.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <a href="index.html" class="footer-logo">StreamZone</a>
+                    <p class="footer-description">
+                        StreamZone is a premium IPTV service provider offering thousands of live TV channels, on-demand
+                        content, and premium features for an unparalleled entertainment experience.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <div class="footer-links">
+                        <h5>Quick Links</h5>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="plans.html">Plans</a></li>
+                            <li><a href="channels.html">Channels</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <div class="footer-links">
+                        <h5>Support</h5>
+                        <ul>
+                            <li><a href="faq.html">FAQ</a></li>
+                            <li><a href="tutorials.html">Setup Tutorials</a></li>
+                            <li><a href="devices.html">Supported Devices</a></li>
+                            <li><a href="refund.html">Refund Policy</a></li>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <div class="footer-links">
+                        <h5>Contact Info</h5>
+                        <ul>
+                            <li><i class="fas fa-envelope me-2"></i> support@streamzone.com</li>
+                            <li><i class="fab fa-whatsapp me-2"></i> +1 (555) 123-4567</li>
+                            <li><i class="fab fa-telegram me-2"></i> @streamzonesupport</li>
+                            <li><i class="fas fa-globe me-2"></i> www.streamzone.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 StreamZone. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Checkout Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="checkoutModalLabel">Complete Your Subscription</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="mb-4">Order Summary</h4>
+                            <div class="order-summary">
+                                <div class="summary-item">
+                                    <span>Plan:</span>
+                                    <span id="summary-plan">Standard</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Duration:</span>
+                                    <span id="summary-duration">3 Months</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Price:</span>
+                                    <span id="summary-price">$24.99</span>
+                                </div>
+                                <div class="summary-total">
+                                    <span>Total:</span>
+                                    <span id="summary-total">$24.99</span>
+                                </div>
+                            </div>
+
+                            <h4 class="mb-4 mt-4">Billing Information</h4>
+                            <form id="checkoutForm">
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName"
+                                        placeholder="Enter your full name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Enter your email"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deviceType" class="form-label">Primary Device Type</label>
+                                    <select class="form-select" id="deviceType" required>
+                                        <option value="">Select your device</option>
+                                        <option value="Android">Android Phone/Tablet</option>
+                                        <option value="iOS">iPhone/iPad</option>
+                                        <option value="Smart TV">Smart TV</option>
+                                        <option value="Fire TV">Amazon Fire TV</option>
+                                        <option value="Android TV">Android TV Box</option>
+                                        <option value="Mag">Mag Device</option>
+                                        <option value="Formuler">Formuler Device</option>
+                                        <option value="PC">Windows/Mac</option>
+                                        <option value="Other">Other Device</option>
+                                    </select>
+                                </div>
+
+                                <h4 class="mb-4 mt-4">Payment Method</h4>
+                                <div class="mb-3">
+                                    <select class="form-select" id="paymentMethod" required>
+                                        <option value="">Select payment method</option>
+                                        <option value="PayPal">PayPal</option>
+                                        <option value="Credit Card">Credit/Debit Card</option>
+                                        <option value="Crypto">Cryptocurrency</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                    </select>
+                                </div>
+
+                                <div id="creditCardFields" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="cardNumber" class="form-label">Card Number</label>
+                                        <input type="text" class="form-control" id="cardNumber"
+                                            placeholder="1234 5678 9012 3456">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="expiryDate" class="form-label">Expiry Date</label>
+                                                <input type="text" class="form-control" id="expiryDate"
+                                                    placeholder="MM/YY">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="cvv" class="form-label">CVV</label>
+                                                <input type="text" class="form-control" id="cvv" placeholder="123">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="mb-4">What You'll Get</h4>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> Instant activation after payment</li>
+                                <li><i class="fas fa-check"></i> Access to all channels in your plan</li>
+                                <li><i class="fas fa-check"></i> 24/7 customer support</li>
+                                <li><i class="fas fa-check"></i> Easy setup instructions</li>
+                                <li><i class="fas fa-check"></i> 7-day money-back guarantee</li>
+                                <li><i class="fas fa-check"></i> Free updates during your subscription</li>
+                            </ul>
+
+                            <div class="mt-4 p-3" style="background-color: var(--dark); border-radius: 8px;">
+                                <h5><i class="fas fa-shield-alt text-primary me-2"></i> Secure Payment</h5>
+                                <p class="small text-muted mb-0">Your payment information is encrypted and secure. We do
+                                    not store your credit card details.</p>
+                            </div>
+
+                            <div class="mt-4 p-3" style="background-color: var(--dark); border-radius: 8px;">
+                                <h5><i class="fas fa-clock text-primary me-2"></i> Instant Activation</h5>
+                                <p class="small text-muted mb-0">Your service will be activated immediately after
+                                    successful payment. You'll receive login details via email.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="completePurchase">Complete Purchase</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container">
+        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong class="me-auto">Purchase Successful</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Thank you for your purchase! Your subscription has been activated.
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/15551234567" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scroll to Top -->
+    <div class="scroll-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Authentication Utilities -->
+    <script src="js/auth.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Navbar background on scroll
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 100) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+
+            // Scroll to top button visibility
+            if (window.scrollY > 300) {
+                document.querySelector('.scroll-to-top').classList.add('active');
+            } else {
+                document.querySelector('.scroll-to-top').classList.remove('active');
+            }
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentNode;
+                item.classList.toggle('active');
+            });
+        });
+
+        // Scroll to top functionality
+        document.querySelector('.scroll-to-top').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Plan selection for checkout modal
+        const checkoutModal = document.getElementById('checkoutModal');
+        if (checkoutModal) {
+            checkoutModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const plan = button.getAttribute('data-plan');
+                const price = button.getAttribute('data-price');
+
+                // Set plan details in modal
+                document.getElementById('summary-plan').textContent = plan;
+                document.getElementById('summary-price').textContent = '$' + price;
+                document.getElementById('summary-total').textContent = '$' + price;
+
+                // Set duration based on plan
+                let duration = '1 Month';
+                if (plan === 'Standard') duration = '3 Months';
+                if (plan === 'Premium') duration = '12 Months';
+                if (plan === 'Family') duration = '6 Months';
+                if (plan === 'Ultimate') duration = '24 Months';
+                if (plan === 'Free Trial') duration = '24 Hours';
+
+                document.getElementById('summary-duration').textContent = duration;
+            });
+        }
+
+        // Show/hide credit card fields based on payment method
+        document.getElementById('paymentMethod').addEventListener('change', function () {
+            const creditCardFields = document.getElementById('creditCardFields');
+            if (this.value === 'Credit Card') {
+                creditCardFields.style.display = 'block';
+            } else {
+                creditCardFields.style.display = 'none';
+            }
+        });
+
+        // Complete purchase button
+        document.getElementById('completePurchase').addEventListener('click', function () {
+            const form = document.getElementById('checkoutForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // In a real implementation, you would process the payment here
+            // For this demo, we'll just show a success message
+
+            // Get form values
+            const plan = document.getElementById('summary-plan').textContent;
+            const price = document.getElementById('summary-price').textContent;
+            const name = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const device = document.getElementById('deviceType').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+
+            console.log('Purchase completed:', { plan, price, name, email, device, paymentMethod });
+
+            // Store purchase in localStorage (simulating database)
+            const purchase = {
+                plan: plan,
+                price: price,
+                name: name,
+                email: email,
+                device: device,
+                paymentMethod: paymentMethod,
+                date: new Date().toISOString()
+            };
+
+            let purchases = JSON.parse(localStorage.getItem('streamzone_purchases')) || [];
+            purchases.push(purchase);
+            localStorage.setItem('streamzone_purchases', JSON.stringify(purchases));
+
+            // Show success toast
+            const toast = new bootstrap.Toast(document.getElementById('successToast'));
+            toast.show();
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+            modal.hide();
+
+            // Reset form
+            document.getElementById('checkoutForm').reset();
+            document.getElementById('creditCardFields').style.display = 'none';
+        });
+
+        // Simulate user authentication check
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if user is logged in (for demo purposes)
+            const isLoggedIn = localStorage.getItem('streamzone_user');
+
+            if (isLoggedIn) {
+                const user = JSON.parse(isLoggedIn);
+                const loginLink = document.querySelector('a[href="login.html"]');
+                if (loginLink) {
+                    loginLink.textContent = 'Dashboard';
+                    loginLink.href = 'dashboard.html';
+                }
+
+                const signupButton = document.querySelector('a[href="signup.html"].btn-primary');
+                if (signupButton) {
+                    signupButton.textContent = 'Dashboard';
+                    signupButton.href = 'dashboard.html';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

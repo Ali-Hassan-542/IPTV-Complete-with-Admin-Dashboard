@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamZone - Premium Admin Panel</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1DB954;
+            --primary-dark: #1aa34a;
+            --dark: #0e0e0e;
+            --dark-secondary: #1a1a1a;
+            --gray: #2a2a2a;
+            --light-gray: #b3b3b3;
+            --white: #ffffff;
+            --orange: #ff9800;
+            --red: #f44336;
+            --blue: #2196F3;
+            --purple: #9C27B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Auth Container Styles */
+        .auth-container {
+            display: none;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .auth-container.active {
+            display: flex;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(29, 185, 84, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .auth-card {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(29, 185, 84, 0.2);
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), #1aa34a, var(--primary));
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
+            border-radius: 20px 20px 0 0;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .auth-brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-brand i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .auth-brand h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), #1aa34a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .auth-brand p {
+            color: var(--light-gray);
+            font-size: 0.95rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: var(--gray);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: var(--light-gray);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .auth-tab:hover:not(.active) {
+            color: var(--white);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-form .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+
+        .auth-form .input-wrapper {
+            position: relative;
+        }
+
+        .auth-form .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-gray);
+            font-size: 1rem;
+        }
+
+        .auth-form .form-control {
+            background-color: var(--gray);
+            border: 2px solid transparent;
+            color: var(--white);
+            border-radius: 10px;
+            padding: 13px 15px 13px 45px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .auth-form .form-control:focus {
+            background-color: var(--gray);
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25);
+            outline: none;
+        }
+
+        .auth-form .form-control::placeholder {
+            color: var(--light-gray);
+        }
+
+        .auth-form .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--light-gray);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .auth-form .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        .auth-form .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+
+        .auth-form .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(29, 185, 84, 0.3);
+        }
+
+        .auth-form .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .auth-form .alert {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: none;
+            padding: 12px 15px;
+        }
+
+        .auth-form .alert-danger {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: #ff6b6b;
+        }
+
+        .auth-form .alert-success {
+            background-color: rgba(29, 185, 84, 0.2);
+            color: var(--primary);
+        }
+
+        .auth-form .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background-color: var(--gray);
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .auth-form .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+        }
+
+        .auth-form .strength-weak {
+            width: 33%;
+            background-color: #f44336;
+        }
+
+        .auth-form .strength-medium {
+            width: 66%;
+            background-color: #ff9800;
+        }
+
+        .auth-form .strength-strong {
+            width: 100%;
+            background-color: var(--primary);
+        }
+
+        .auth-form .password-strength-text {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .auth-form .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Hide dashboard when auth is active */
+        .dashboard-wrapper {
+            display: block;
+        }
+
+        .dashboard-wrapper.hidden {
+            display: none;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: var(--dark-secondary);
+            min-height: 100vh;
+            padding: 20px 0;
+            position: fixed;
+            width: 280px;
+            border-right: 1px solid var(--gray);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: var(--gray);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-menu i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .menu-badge {
+            margin-left: auto;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background-color: var(--dark-secondary);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .header h1 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .notification-bell {
+            position: relative;
+            margin-right: 20px;
+            font-size: 1.3rem;
+            color: var(--light-gray);
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--red);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--dark-secondary);
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background-color: var(--gray);
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--gray);
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            text-align: center;
+            padding: 25px 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--blue));
+        }
+
+        .stats-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stats-label {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .stats-trend {
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .trend-up {
+            color: var(--primary);
+        }
+
+        .trend-down {
+            color: var(--red);
+        }
+
+        /* Tables */
+        .table {
+            color: var(--white);
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: var(--gray);
+            border-color: var(--gray);
+            font-weight: 600;
+            padding: 15px;
+        }
+
+        .table td {
+            border-color: var(--gray);
+            vertical-align: middle;
+            padding: 15px;
+        }
+
+        .status-online {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .status-offline {
+            color: var(--light-gray);
+        }
+
+        /* Signal Strength */
+        .signal-strength {
+            display: flex;
+            align-items: center;
+        }
+
+        .signal-bars {
+            display: flex;
+            align-items: flex-end;
+            margin-right: 10px;
+            height: 20px;
+        }
+
+        .signal-bar {
+            width: 4px;
+            margin-right: 2px;
+            border-radius: 1px;
+        }
+
+        .signal-good .signal-bar:nth-child(1) {
+            height: 5px;
+            background-color: var(--primary);
+        }
+
+        .signal-good .signal-bar:nth-child(2) {
+            height: 10px;
+            background-color: var(--primary);
+        }
+
+        .signal-good .signal-bar:nth-child(3) {
+            height: 15px;
+            background-color: var(--primary);
+        }
+
+        .signal-good .signal-bar:nth-child(4) {
+            height: 20px;
+            background-color: var(--primary);
+        }
+
+        .signal-medium .signal-bar:nth-child(1) {
+            height: 5px;
+            background-color: var(--orange);
+        }
+
+        .signal-medium .signal-bar:nth-child(2) {
+            height: 10px;
+            background-color: var(--orange);
+        }
+
+        .signal-medium .signal-bar:nth-child(3) {
+            height: 15px;
+            background-color: var(--orange);
+        }
+
+        .signal-medium .signal-bar:nth-child(4) {
+            height: 5px;
+            background-color: var(--light-gray);
+        }
+
+        .signal-poor .signal-bar:nth-child(1) {
+            height: 5px;
+            background-color: var(--red);
+        }
+
+        .signal-poor .signal-bar:nth-child(2) {
+            height: 10px;
+            background-color: var(--red);
+        }
+
+        .signal-poor .signal-bar:nth-child(3) {
+            height: 5px;
+            background-color: var(--light-gray);
+        }
+
+        .signal-poor .signal-bar:nth-child(4) {
+            height: 5px;
+            background-color: var(--light-gray);
+        }
+
+        .signal-text {
+            font-size: 0.85rem;
+        }
+
+        .signal-good .signal-text {
+            color: var(--primary);
+        }
+
+        .signal-medium .signal-text {
+            color: var(--orange);
+        }
+
+        .signal-poor .signal-text {
+            color: var(--red);
+        }
+
+        /* Live Status */
+        .live-status {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-online .status-indicator {
+            background-color: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .current-watching {
+            font-size: 0.85rem;
+            color: var(--light-gray);
+            margin-top: 5px;
+        }
+
+        .content-type {
+            font-size: 0.75rem;
+            background-color: var(--gray);
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        /* Progress Bars */
+        .progress {
+            background-color: var(--gray);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            border-radius: 4px;
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Tabs */
+        .nav-tabs {
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--light-gray);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: transparent;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.3);
+        }
+
+        /* Forms */
+        .form-control {
+            background-color: var(--gray);
+            border: 1px solid var(--gray);
+            color: var(--white);
+            border-radius: 6px;
+            padding: 10px 15px;
+        }
+
+        .form-control:focus {
+            background-color: var(--gray);
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-brand span,
+            .sidebar-menu span,
+            .menu-badge {
+                display: none;
+            }
+
+            .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .user-info {
+                margin-top: 15px;
+            }
+        }
+
+        /* Notification Dropdown Styles */
+        .notification-dropdown .btn {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .notification-dropdown .btn:focus {
+            box-shadow: none;
+        }
+
+        .notification-bell {
+            position: relative;
+            margin-right: 15px;
+            font-size: 1.3rem;
+            color: var(--light-gray);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .notification-bell:hover {
+            color: var(--primary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background-color: var(--red);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .notification-menu {
+            background-color: var(--dark-secondary);
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            padding: 0;
+            min-width: 320px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
+        }
+
+        .notification-menu .dropdown-header {
+            background-color: var(--gray);
+            color: var(--white);
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            font-weight: 600;
+        }
+
+        .notification-menu .dropdown-item {
+            color: var(--white);
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        .notification-menu .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-menu .dropdown-item:hover {
+            background-color: var(--gray);
+            color: var(--primary);
+        }
+
+        .notification-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .notification-icon.bg-success {
+            background-color: rgba(29, 185, 84, 0.2);
+            color: var(--primary);
+        }
+
+        .notification-icon.bg-primary {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+        }
+
+        .notification-icon.bg-warning {
+            background-color: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
+        }
+
+        .notification-icon.bg-info {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+        }
+
+        .notification-text {
+            font-size: 0.9rem;
+            color: var(--white);
+        }
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown .btn {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .profile-dropdown .btn:focus {
+            box-shadow: none;
+        }
+
+        .profile-btn .user-info {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: var(--gray);
+        }
+
+        .profile-btn:hover .user-info {
+            background-color: var(--primary);
+        }
+
+        .profile-btn .user-avatar {
+            width: 38px;
+            height: 38px;
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+
+        .profile-btn .user-details {
+            text-align: left;
+        }
+
+        .profile-btn .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--white);
+        }
+
+        .profile-btn .text-muted {
+            font-size: 0.75rem;
+        }
+
+        .profile-btn .fa-chevron-down {
+            font-size: 0.75rem;
+            color: var(--light-gray);
+            margin-left: 8px;
+        }
+
+        .profile-menu {
+            background-color: var(--dark-secondary);
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            padding: 0;
+            min-width: 220px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
+        }
+
+        .profile-menu .dropdown-header {
+            background-color: var(--gray);
+            color: var(--white);
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .profile-menu .profile-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .profile-menu .dropdown-item {
+            color: var(--white);
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-menu .dropdown-item:hover {
+            background-color: var(--gray);
+            color: var(--primary);
+        }
+
+        .profile-menu .dropdown-item.text-danger:hover {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+        }
+
+        /* Dropdown arrow */
+        .dropdown-menu[data-bs-popper] {
+            top: 10px;
+        }
+
+        /* Profile Dropdown - Higher z-index to appear above notification */
+        .profile-dropdown .dropdown-menu {
+            z-index: 1060;
+        }
+
+        .notification-dropdown .dropdown-menu {
+            z-index: 1055;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Auth Container (Shows when not logged in) -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <i class="fas fa-satellite-dish"></i>
+                <h2>StreamZone Pro</h2>
+                <p>Admin Dashboard Portal</p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="signupTab" onclick="showAuthForm('signup')">
+                    <i class="fas fa-user-plus me-2"></i>Sign Up
+                </button>
+                <button class="auth-tab" id="loginTab" onclick="showAuthForm('login')">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </button>
+            </div>
+
+            <div id="authAlertContainer"></div>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="auth-form active">
+                <div class="form-group">
+                    <label class="form-label" for="signupName">Full Name</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" class="form-control" id="signupName" placeholder="John Doe" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="signupEmail">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" class="form-control" id="signupEmail" placeholder="admin@example.com"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="signupPassword">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="form-control" id="signupPassword"
+                            placeholder="Minimum 6 characters" required>
+                        <button type="button" class="password-toggle"
+                            onclick="togglePassword('signupPassword', 'toggleSignup')">
+                            <i class="fas fa-eye" id="toggleSignup"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <div class="password-strength-text" id="passwordStrengthText"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="signupConfirm">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="form-control" id="signupConfirm" placeholder="Re-enter password"
+                            required>
+                        <button type="button" class="password-toggle"
+                            onclick="togglePassword('signupConfirm', 'toggleSignupConfirm')">
+                            <i class="fas fa-eye" id="toggleSignupConfirm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="signupBtn">
+                    <span id="signupBtnText">Create Account</span>
+                    <span id="signupBtnSpinner" class="spinner" style="display: none;"></span>
+                </button>
+            </form>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label" for="loginEmail">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" class="form-control" id="loginEmail" placeholder="admin@example.com"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="loginPassword">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password"
+                            required>
+                        <button type="button" class="password-toggle"
+                            onclick="togglePassword('loginPassword', 'toggleLogin')">
+                            <i class="fas fa-eye" id="toggleLogin"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="loginBtn">
+                    <span id="loginBtnText">Login</span>
+                    <span id="loginBtnSpinner" class="spinner" style="display: none;"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sidebar and Main Content Wrapper -->
+    <div class="dashboard-wrapper" id="dashboardWrapper">
+        <div class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-satellite-dish me-2"></i>
+                <span>StreamZone Pro</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#" class="active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Dashboard_customers.html">
+                        <i class="fas fa-users"></i>
+                        <span>Customers</span>
+                        <span class="menu-badge">1,254</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Dashboard_linemanagers.html">
+                        <i class="fas fa-satellite-dish"></i>
+                        <span>Lines Manager</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Dashboard_billings.html">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Billing & Payments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Servers.html">
+                        <i class="fas fa-server"></i>
+                        <span>Servers</span>
+                        <span class="menu-badge">5</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Dashboard_analytics.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="logout(); return false;">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+                <div class="d-flex align-items-center">
+                    <!-- Notification Section -->
+                    <div class="dropdown notification-dropdown">
+                        <button class="btn notification-btn" type="button" id="notificationDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="notification-bell">
+                                <i class="fas fa-bell"></i>
+                                <span class="notification-badge">5</span>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu notification-menu" aria-labelledby="notificationDropdown">
+                            <li class="dropdown-header">
+                                <i class="fas fa-bell me-2"></i>Notifications
+                                <span class="badge bg-danger ms-2">5</span>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item notification-item" href="#">
+                                    <div class="d-flex align-items-start">
+                                        <div class="notification-icon bg-success">
+                                            <i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <div class="ms-2">
+                                            <div class="notification-text">New customer registered</div>
+                                            <small class="text-muted">Alex Johnson - 10 min ago</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item notification-item" href="#">
+                                    <div class="d-flex align-items-start">
+                                        <div class="notification-icon bg-primary">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <div class="ms-2">
+                                            <div class="notification-text">Payment received</div>
+                                            <small class="text-muted">$24.99 - Sarah Smith</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item notification-item" href="#">
+                                    <div class="d-flex align-items-start">
+                                        <div class="notification-icon bg-warning">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="ms-2">
+                                            <div class="notification-text">Server warning</div>
+                                            <small class="text-muted">High CPU on Server 3</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item notification-item" href="#">
+                                    <div class="d-flex align-items-start">
+                                        <div class="notification-icon bg-info">
+                                            <i class="fas fa-cog"></i>
+                                        </div>
+                                        <div class="ms-2">
+                                            <div class="notification-text">Settings updated</div>
+                                            <small class="text-muted">Stream quality changed</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-center text-primary" href="#">View All Notifications</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Profile Section -->
+                    <div class="dropdown profile-dropdown">
+                        <button class="btn profile-btn" type="button" id="profileDropdown" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="user-details">
+                                    <div class="user-name">Admin User</div>
+                                    <small class="text-muted">Super Administrator</small>
+                                </div>
+                                <i class="fas fa-chevron-down ms-2"></i>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu profile-menu" aria-labelledby="profileDropdown">
+                            <li class="dropdown-header">
+                                <div class="d-flex align-items-center">
+                                    <div class="profile-avatar">
+                                        <i class="fas fa-user-shield"></i>
+                                    </div>
+                                    <div class="ms-2">
+                                        <div class="fw-bold">Admin User</div>
+                                        <small class="text-muted">admin@streamzone.com</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user me-2"></i>My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cog me-2"></i>Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-lock me-2"></i>Change Password
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card stats-card">
+                        <div class="stats-icon text-primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stats-number">1,254</div>
+                        <div class="stats-label">Total Customers</div>
+                        <div class="stats-trend trend-up">
+                            <i class="fas fa-arrow-up"></i> 5.2% from last month
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card stats-card">
+                        <div class="stats-icon text-success">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="stats-number">856</div>
+                        <div class="stats-label">Online Now</div>
+                        <div class="stats-trend trend-up">
+                            <i class="fas fa-arrow-up"></i> 12.7% currently
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card stats-card">
+                        <div class="stats-icon text-warning">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stats-number">$8,542</div>
+                        <div class="stats-label">Monthly Revenue</div>
+                        <div class="stats-trend trend-up">
+                            <i class="fas fa-arrow-up"></i> 8.3% from last month
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card stats-card">
+                        <div class="stats-icon text-info">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div class="stats-number">98.7%</div>
+                        <div class="stats-label">Server Uptime</div>
+                        <div class="stats-trend trend-down">
+                            <i class="fas fa-arrow-down"></i> 0.3% from yesterday
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Customer Monitoring -->
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-desktop me-2"></i>Live Customer Monitoring</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
+                                <label class="form-check-label" for="autoRefresh">Auto Refresh</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer</th>
+                                            <th>Username</th>
+                                            <th>Status</th>
+                                            <th>Signal Strength</th>
+                                            <th>Current Activity</th>
+                                            <th>Connection Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div>John Doe</div>
+                                                <small class="text-muted">Premium Plan</small>
+                                            </td>
+                                            <td>john_iptv</td>
+                                            <td class="status-online">
+                                                <div class="live-status">
+                                                    <div class="status-indicator"></div>
+                                                    Online
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="signal-strength signal-good">
+                                                    <div class="signal-bars">
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                    </div>
+                                                    <div class="signal-text">Excellent</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>Star Plus HD <span class="content-type">Live TV</span></div>
+                                                <div class="current-watching">Entertainment • 720p • 2.5 Mbps</div>
+                                            </td>
+                                            <td>2h 15m</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>Sarah Smith</div>
+                                                <small class="text-muted">Standard Plan</small>
+                                            </td>
+                                            <td>sarah_stream</td>
+                                            <td class="status-online">
+                                                <div class="live-status">
+                                                    <div class="status-indicator"></div>
+                                                    Online
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="signal-strength signal-medium">
+                                                    <div class="signal-bars">
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                    </div>
+                                                    <div class="signal-text">Good</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>Netflix - Stranger Things <span class="content-type">VOD</span>
+                                                </div>
+                                                <div class="current-watching">Series • 1080p • 4.2 Mbps</div>
+                                            </td>
+                                            <td>45m</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>Mike Johnson</div>
+                                                <small class="text-muted">Premium Plan</small>
+                                            </td>
+                                            <td>mike_tv</td>
+                                            <td class="status-online">
+                                                <div class="live-status">
+                                                    <div class="status-indicator"></div>
+                                                    Online
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="signal-strength signal-poor">
+                                                    <div class="signal-bars">
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                    </div>
+                                                    <div class="signal-text">Poor</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>ESPN HD <span class="content-type">Live TV</span></div>
+                                                <div class="current-watching">Sports • 480p • 1.2 Mbps</div>
+                                            </td>
+                                            <td>1h 30m</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>Emma Wilson</div>
+                                                <small class="text-muted">Basic Plan</small>
+                                            </td>
+                                            <td>emma_ent</td>
+                                            <td class="status-offline">Offline</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>Robert Brown</div>
+                                                <small class="text-muted">Premium Plan</small>
+                                            </td>
+                                            <td>robert_iptv</td>
+                                            <td class="status-online">
+                                                <div class="live-status">
+                                                    <div class="status-indicator"></div>
+                                                    Online
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="signal-strength signal-good">
+                                                    <div class="signal-bars">
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                        <div class="signal-bar"></div>
+                                                    </div>
+                                                    <div class="signal-text">Excellent</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>HBO Max - Movie <span class="content-type">VOD</span></div>
+                                                <div class="current-watching">Movie • 4K • 12.5 Mbps</div>
+                                            </td>
+                                            <td>3h 10m</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Server Performance -->
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Bandwidth Usage</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="bandwidthChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-memory me-2"></i>Server Resources</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-4">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>CPU Usage</span>
+                                            <span>68%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-warning" style="width: 68%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Memory Usage</span>
+                                            <span>42%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-info" style="width: 42%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Disk Usage</span>
+                                            <span>78%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-danger" style="width: 78%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Network I/O</span>
+                                            <span>56%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success" style="width: 56%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Quick Actions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary mb-2">
+                                    <i class="fas fa-plus-circle me-2"></i>Create New Line
+                                </button>
+                                <button class="btn btn-outline-primary mb-2">
+                                    <i class="fas fa-credit-card me-2"></i>Add Credits
+                                </button>
+                                <button class="btn btn-outline-primary mb-2">
+                                    <i class="fas fa-user-plus me-2"></i>Add Customer
+                                </button>
+                                <button class="btn btn-outline-primary mb-2">
+                                    <i class="fas fa-cog me-2"></i>Server Settings
+                                </button>
+                                <button class="btn btn-outline-primary">
+                                    <i class="fas fa-chart-bar me-2"></i>Generate Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Server Status -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-server me-2"></i>Server Status</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Server 1 (USA)</span>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" style="width: 92%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Server 2 (Europe)</span>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" style="width: 87%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Server 3 (Asia)</span>
+                                    <span class="badge bg-warning">Maintenance</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Server 4 (Backup)</span>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" style="width: 76%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-history me-2"></i>Recent Activities</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-list">
+                                <div class="activity-item mb-3">
+                                    <div class="d-flex">
+                                        <div class="activity-icon bg-primary rounded-circle d-flex align-items-center justify-content-center me-3"
+                                            style="width: 40px; height: 40px;">
+                                            <i class="fas fa-user-plus text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">New customer registered</div>
+                                            <div class="text-muted small">Alex Johnson - 10 minutes ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="activity-item mb-3">
+                                    <div class="d-flex">
+                                        <div class="activity-icon bg-success rounded-circle d-flex align-items-center justify-content-center me-3"
+                                            style="width: 40px; height: 40px;">
+                                            <i class="fas fa-credit-card text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Payment received</div>
+                                            <div class="text-muted small">Sarah Smith - $24.99 - 1 hour ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="activity-item mb-3">
+                                    <div class="d-flex">
+                                        <div class="activity-icon bg-warning rounded-circle d-flex align-items-center justify-content-center me-3"
+                                            style="width: 40px; height: 40px;">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Server warning</div>
+                                            <div class="text-muted small">High CPU usage on Server 3 - 2 hours ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="d-flex">
+                                        <div class="activity-icon bg-info rounded-circle d-flex align-items-center justify-content-center me-3"
+                                            style="width: 40px; height: 40px;">
+                                            <i class="fas fa-cog text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Settings updated</div>
+                                            <div class="text-muted small">Stream quality settings changed - 3 hours ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Custom JavaScript -->
+        <script>
+            // Initialize Charts
+            const bandwidthCtx = document.getElementById('bandwidthChart').getContext('2d');
+            const bandwidthChart = new Chart(bandwidthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                    datasets: [{
+                        label: 'Download (Mbps)',
+                        data: [120, 150, 300, 450, 320, 280],
+                        borderColor: '#1DB954',
+                        backgroundColor: 'rgba(29, 185, 84, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Upload (Mbps)',
+                        data: [40, 60, 80, 120, 90, 70],
+                        borderColor: '#2196F3',
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#b3b3b3'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#b3b3b3'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#b3b3b3'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Simulate real-time updates
+            function updateLiveStatus() {
+                const statusElements = document.querySelectorAll('.status-online .current-watching');
+                const signalElements = document.querySelectorAll('.signal-strength');
+                const channels = [
+                    { name: 'Star Plus HD - Live TV', type: 'Live TV', quality: '720p', bitrate: '2.5 Mbps' },
+                    { name: 'Netflix - Movie', type: 'VOD', quality: '1080p', bitrate: '4.2 Mbps' },
+                    { name: 'ESPN HD - Sports', type: 'Live TV', quality: '480p', bitrate: '1.2 Mbps' },
+                    { name: 'HBO Max - Series', type: 'VOD', quality: '4K', bitrate: '12.5 Mbps' },
+                    { name: 'Zee TV HD - Entertainment', type: 'Live TV', quality: '720p', bitrate: '2.8 Mbps' }
+                ];
+
+                const signalTypes = ['signal-good', 'signal-medium', 'signal-poor'];
+                const signalTexts = ['Excellent', 'Good', 'Poor'];
+
+                statusElements.forEach((element, index) => {
+                    if (Math.random() > 0.5) { // 50% chance to change status
+                        const randomChannel = channels[Math.floor(Math.random() * channels.length)];
+                        const parent = element.parentElement;
+                        const titleElement = parent.querySelector('div');
+                        const typeElement = parent.querySelector('.content-type');
+
+                        titleElement.innerHTML = randomChannel.name + ` <span class="content-type">${randomChannel.type}</span>`;
+                        element.textContent = `${randomChannel.quality} • ${randomChannel.bitrate}`;
+                    }
+                });
+
+                // Randomly change signal strength for demonstration
+                signalElements.forEach(element => {
+                    if (Math.random() > 0.7) { // 30% chance to change signal
+                        const randomSignal = Math.floor(Math.random() * signalTypes.length);
+                        element.className = `signal-strength ${signalTypes[randomSignal]}`;
+                        element.querySelector('.signal-text').textContent = signalTexts[randomSignal];
+                    }
+                });
+            }
+
+            // Auto-refresh functionality
+            let refreshInterval;
+            const autoRefreshCheckbox = document.getElementById('autoRefresh');
+
+            function startAutoRefresh() {
+                refreshInterval = setInterval(updateLiveStatus, 5000);
+            }
+
+            function stopAutoRefresh() {
+                clearInterval(refreshInterval);
+            }
+
+            autoRefreshCheckbox.addEventListener('change', function () {
+                if (this.checked) {
+                    startAutoRefresh();
+                } else {
+                    stopAutoRefresh();
+                }
+            });
+
+            // Start auto-refresh by default
+            startAutoRefresh();
+
+            // Update bandwidth chart data periodically
+            setInterval(() => {
+                if (autoRefreshCheckbox.checked) {
+                    const newData1 = bandwidthChart.data.datasets[0].data.map(value => {
+                        return Math.max(50, value + (Math.random() * 100 - 50));
+                    });
+                    const newData2 = bandwidthChart.data.datasets[1].data.map(value => {
+                        return Math.max(10, value + (Math.random() * 40 - 20));
+                    });
+
+                    bandwidthChart.data.datasets[0].data = newData1;
+                    bandwidthChart.data.datasets[1].data = newData2;
+                    bandwidthChart.update();
+                }
+            }, 10000);
+        </script>
+
+        <!-- Authentication Utilities -->
+        <script src="auth.js"></script>
+
+        <!-- Integrated Auth & Dashboard Logic -->
+        <script>
+            // Tab switching for auth forms
+            function showAuthForm(form) {
+                const signupTab = document.getElementById('signupTab');
+                const loginTab = document.getElementById('loginTab');
+                const signupForm = document.getElementById('signupForm');
+                const loginForm = document.getElementById('loginForm');
+
+                if (form === 'signup') {
+                    signupTab.classList.add('active');
+                    loginTab.classList.remove('active');
+                    signupForm.classList.add('active');
+                    loginForm.classList.remove('active');
+                } else {
+                    loginTab.classList.add('active');
+                    signupTab.classList.remove('active');
+                    loginForm.classList.add('active');
+                    signupForm.classList.remove('active');
+                }
+
+                // Clear alerts when switching
+                document.getElementById('authAlertContainer').innerHTML = '';
+            }
+
+            // Password toggle
+            function togglePassword(inputId, iconId) {
+                const input = document.getElementById(inputId);
+                const icon = document.getElementById(iconId);
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            }
+
+            // Show alert
+            function showAuthAlert(message, type = 'danger') {
+                const alertContainer = document.getElementById('authAlertContainer');
+                alertContainer.innerHTML = `
+                    <div class="alert alert-${type}">
+                        <i class="fas fa-${type === 'danger' ? 'exclamation-circle' : 'check-circle'}"></i>
+                        ${message}
+                    </div>
+                `;
+            }
+
+            // Password strength
+            const signupPassword = document.getElementById('signupPassword');
+            const passwordStrength = document.getElementById('passwordStrength');
+            const passwordStrengthBar = document.getElementById('passwordStrengthBar');
+            const passwordStrengthText = document.getElementById('passwordStrengthText');
+
+            if (signupPassword) {
+                signupPassword.addEventListener('input', function () {
+                    const password = this.value;
+
+                    if (password.length === 0) {
+                        passwordStrength.style.display = 'none';
+                        passwordStrengthText.style.display = 'none';
+                        return;
+                    }
+
+                    passwordStrength.style.display = 'block';
+                    passwordStrengthText.style.display = 'block';
+
+                    let strength = 0;
+                    if (password.length >= 6) strength++;
+                    if (password.length >= 10) strength++;
+                    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+                    if (/[0-9]/.test(password)) strength++;
+                    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+                    passwordStrengthBar.className = 'password-strength-bar';
+
+                    if (strength <= 2) {
+                        passwordStrengthBar.classList.add('strength-weak');
+                        passwordStrengthText.textContent = 'Weak password';
+                        passwordStrengthText.style.color = '#f44336';
+                    } else if (strength <= 3) {
+                        passwordStrengthBar.classList.add('strength-medium');
+                        passwordStrengthText.textContent = 'Medium password';
+                        passwordStrengthText.style.color = '#ff9800';
+                    } else {
+                        passwordStrengthBar.classList.add('strength-strong');
+                        passwordStrengthText.textContent = 'Strong password';
+                        passwordStrengthText.style.color = 'var(--primary)';
+                    }
+                });
+            }
+
+            // Initialize auth/dashboard flow
+            document.addEventListener('DOMContentLoaded', function () {
+                const authContainer = document.getElementById('authContainer');
+                const dashboardWrapper = document.getElementById('dashboardWrapper');
+
+                if (isAuthenticated()) {
+                    // User is logged in - show dashboard
+                    authContainer.classList.remove('active');
+                    dashboardWrapper.classList.remove('hidden');
+
+                    // Display user info
+                    const admin = getCurrentAdmin();
+                    const userInfoDiv = document.querySelector('.user-info > div');
+                    if (userInfoDiv && admin) {
+                        userInfoDiv.innerHTML = `
+                            <div style="font-weight: 600;">${admin.fullName}</div>
+                            <small class="text-muted">Administrator</small>
+                        `;
+                    }
+                } else {
+                    // User is not logged in - show auth
+                    authContainer.classList.add('active');
+                    dashboardWrapper.classList.add('hidden');
+                }
+            });
+
+            // Signup form submission
+            const signupFormEl = document.getElementById('signupForm');
+            if (signupFormEl) {
+                const signupBtn = document.getElementById('signupBtn');
+                const signupBtnText = document.getElementById('signupBtnText');
+                const signupBtnSpinner = document.getElementById('signupBtnSpinner');
+
+                signupFormEl.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const fullName = document.getElementById('signupName').value;
+                    const email = document.getElementById('signupEmail').value;
+                    const password = document.getElementById('signupPassword').value;
+                    const confirmPassword = document.getElementById('signupConfirm').value;
+
+                    if (password !== confirmPassword) {
+                        showAuthAlert('Passwords do not match!', 'danger');
+                        return;
+                    }
+
+                    signupBtn.disabled = true;
+                    signupBtnText.style.display = 'none';
+                    signupBtnSpinner.style.display = 'inline-block';
+
+                    try {
+                        const result = await signup(fullName, email, password);
+
+                        if (result.success) {
+                            showAuthAlert(result.message + ' Please login to continue.', 'success');
+                            setTimeout(() => {
+                                showAuthForm('login');
+                                document.getElementById('loginEmail').value = email;
+                                signupBtn.disabled = false;
+                                signupBtnText.style.display = 'inline';
+                                signupBtnSpinner.style.display = 'none';
+                                signupFormEl.reset();
+                            }, 1500);
+                        } else {
+                            showAuthAlert(result.message, 'danger');
+                            signupBtn.disabled = false;
+                            signupBtnText.style.display = 'inline';
+                            signupBtnSpinner.style.display = 'none';
+                        }
+                    } catch (error) {
+                        showAuthAlert('An error occurred. Please try again.', 'danger');
+                        signupBtn.disabled = false;
+                        signupBtnText.style.display = 'inline';
+                        signupBtnSpinner.style.display = 'none';
+                    }
+                });
+            }
+
+            // Login form submission
+            const loginFormEl = document.getElementById('loginForm');
+            if (loginFormEl) {
+                const loginBtn = document.getElementById('loginBtn');
+                const loginBtnText = document.getElementById('loginBtnText');
+                const loginBtnSpinner = document.getElementById('loginBtnSpinner');
+
+                loginFormEl.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const email = document.getElementById('loginEmail').value;
+                    const password = document.getElementById('loginPassword').value;
+
+                    loginBtn.disabled = true;
+                    loginBtnText.style.display = 'none';
+                    loginBtnSpinner.style.display = 'inline-block';
+
+                    try {
+                        const result = await login(email, password);
+
+                        if (result.success) {
+                            showAuthAlert(result.message, 'success');
+                            setTimeout(() => {
+                                // Reload page to show dashboard
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            showAuthAlert(result.message, 'danger');
+                            loginBtn.disabled = false;
+                            loginBtnText.style.display = 'inline';
+                            loginBtnSpinner.style.display = 'none';
+                        }
+                    } catch (error) {
+                        showAuthAlert('An error occurred. Please try again.', 'danger');
+                        loginBtn.disabled = false;
+                        loginBtnText.style.display = 'inline';
+                        loginBtnSpinner.style.display = 'none';
+                    }
+                });
+            }
+
+            // Override logout function for integrated flow
+            function logout() {
+                clearSession();
+                window.location.reload();
+            }
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamZone - Login</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1DB954;
+            --primary-dark: #1aa34a;
+            --dark: #0e0e0e;
+            --dark-secondary: #1a1a1a;
+            --gray: #2a2a2a;
+            --light-gray: #b3b3b3;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: rgba(14, 14, 14, 0.95);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            background-color: var(--dark);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary) !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--white) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary) !important;
+        }
+
+        .navbar-toggler {
+            border: none;
+            color: var(--white);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* Enhanced Navbar Auth Buttons */
+        .btn-nav-auth {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid;
+            margin-left: 10px;
+        }
+
+        .btn-nav-auth::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+            z-index: 0;
+        }
+
+        .btn-nav-auth:hover::before {
+            width: 250px;
+            height: 250px;
+        }
+
+        .btn-nav-auth i,
+        .btn-nav-auth span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-nav-signin {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-nav-signin:hover {
+            background: linear-gradient(135deg, var(--primary), #1aa34a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(29, 185, 84, 0.35);
+            border-color: transparent;
+            color: var(--white);
+        }
+
+        .btn-nav-signin.active {
+            background: linear-gradient(135deg, var(--primary), #1aa34a);
+            border-color: transparent;
+        }
+
+        .btn-nav-signup {
+            background: linear-gradient(135deg, var(--primary), #17a34a);
+            border-color: transparent;
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(29, 185, 84, 0.25);
+        }
+
+        .btn-nav-signup:hover {
+            background: linear-gradient(135deg, #17a34a, #0f8239);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(29, 185, 84, 0.4);
+            color: var(--white);
+        }
+
+        .btn-nav-signup.active {
+            background: linear-gradient(135deg, #17a34a, #0f8239);
+        }
+
+        @media (max-width: 991px) {
+            .btn-nav-auth {
+                margin: 10px 0;
+                justify-content: center;
+            }
+        }
+
+        /* Login Section */
+        .login-section {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 80px;
+        }
+
+        .login-container {
+            background-color: var(--dark-secondary);
+            border-radius: 10px;
+            padding: 50px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--gray);
+        }
+
+        .login-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .login-subtitle {
+            color: var(--light-gray);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-form .form-control {
+            background-color: var(--gray);
+            border: 1px solid var(--gray);
+            border-radius: 5px;
+            color: var(--white);
+            height: 50px;
+            padding: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .login-form .form-control:focus {
+            background-color: var(--gray);
+            color: var(--white);
+            box-shadow: 0 0 0 2px var(--primary);
+            border-color: var(--primary);
+        }
+
+        .login-form .form-control::placeholder {
+            color: var(--light-gray);
+        }
+
+        .btn-login {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 20px 0 15px;
+            padding: 15px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(29, 185, 84, 0.2);
+        }
+
+        .login-help {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 5px;
+        }
+
+        .help-link {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .help-link:hover {
+            text-decoration: underline;
+        }
+
+        .signup-now {
+            color: var(--light-gray);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .signup-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--light-gray);
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .divider span {
+            padding: 0 15px;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-social {
+            flex: 1;
+            background-color: var(--gray);
+            color: var(--white);
+            border: 1px solid var(--gray);
+            border-radius: 5px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-social:hover {
+            background-color: var(--dark);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-secondary);
+            padding: 60px 0 20px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-description {
+            color: var(--light-gray);
+            margin-bottom: 20px;
+        }
+
+        .footer-links h5 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links ul li a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--gray);
+            color: var(--white);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Scroll to Top */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 100px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px rgba(29, 185, 84, 0.3);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 40px 30px;
+            }
+
+            .login-help {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .social-login {
+                flex-direction: column;
+            }
+
+            .scroll-to-top {
+                right: 25px;
+                bottom: 90px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">StreamZone</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="plans.html">Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="channels.html">Channels</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="btn-nav-auth btn-nav-signin active" href="signin.html">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Sign In</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-nav-auth btn-nav-signup" href="signup.html">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="login-section">
+        <div class="login-container">
+            <h1 class="login-title">Sign In</h1>
+            <p class="login-subtitle">Access your StreamZone account</p>
+
+            <form class="login-form">
+                <div class="mb-3">
+                    <input type="email" class="form-control" id="email" placeholder="Email address" required>
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                </div>
+
+                <div class="login-help">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="help-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-login">Sign In</button>
+
+                <div class="divider">
+                    <span>or continue with</span>
+                </div>
+
+                <div class="social-login">
+                    <a href="#" class="btn-social">
+                        <i class="fab fa-google"></i> Google
+                    </a>
+                    <a href="#" class="btn-social">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </a>
+                </div>
+
+                <div class="signup-now">
+                    <span>Don't have an account? </span>
+                    <a href="signup.html" class="signup-link">Sign up now</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <a href="index.html" class="footer-logo">StreamZone</a>
+                    <p class="footer-description">
+                        StreamZone is a premium IPTV service provider offering thousands of live TV channels, on-demand
+                        content, and premium features for an unparalleled entertainment experience.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <div class="footer-links">
+                        <h5>Quick Links</h5>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="plans.html">Plans</a></li>
+                            <li><a href="channels.html">Channels</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <div class="footer-links">
+                        <h5>Support</h5>
+                        <ul>
+                            <li><a href="faq.html">FAQ</a></li>
+                            <li><a href="tutorials.html">Setup Tutorials</a></li>
+                            <li><a href="devices.html">Supported Devices</a></li>
+                            <li><a href="refund.html">Refund Policy</a></li>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <div class="footer-links">
+                        <h5>Contact Info</h5>
+                        <ul>
+                            <li><i class="fas fa-envelope me-2"></i> support@streamzone.com</li>
+                            <li><i class="fab fa-whatsapp me-2"></i> +1 (555) 123-4567</li>
+                            <li><i class="fab fa-telegram me-2"></i> @streamzonesupport</li>
+                            <li><i class="fas fa-globe me-2"></i> www.streamzone.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 StreamZone. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/15551234567" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scroll to Top -->
+    <div class="scroll-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Authentication Utilities -->
+    <script src="js/auth.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Navbar background on scroll
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 100) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+
+            // Scroll to top button visibility
+            if (window.scrollY > 300) {
+                document.querySelector('.scroll-to-top').classList.add('active');
+            } else {
+                document.querySelector('.scroll-to-top').classList.remove('active');
+            }
+        });
+
+        // Scroll to top functionality
+        document.querySelector('.scroll-to-top').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Enhanced form submission with validation
+        const loginForm = document.querySelector('.login-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        // Real-time email validation
+        emailInput.addEventListener('blur', function () {
+            const email = this.value.trim();
+            if (email && !Validator.validateEmail(email)) {
+                Validator.showError(this, 'Please enter a valid email address');
+            } else if (email) {
+                Validator.clearError(this);
+            }
+        });
+
+        // Real-time password validation
+        passwordInput.addEventListener('blur', function () {
+            const password = this.value;
+            if (password) {
+                const validation = Validator.validatePassword(password);
+                if (!validation.valid) {
+                    Validator.showError(this, validation.message);
+                } else {
+                    Validator.clearError(this);
+                }
+            }
+        });
+
+        // Clear errors on input
+        [emailInput, passwordInput].forEach(input => {
+            input.addEventListener('input', function () {
+                Validator.clearError(this);
+            });
+        });
+
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            Validator.clearAllErrors();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            let hasError = false;
+
+            // Validate email
+            if (!email) {
+                Validator.showError(emailInput, 'Email is required');
+                hasError = true;
+            } else if (!Validator.validateEmail(email)) {
+                Validator.showError(emailInput, 'Please enter a valid email address');
+                hasError = true;
+            }
+
+            // Validate password
+            if (!password) {
+                Validator.showError(passwordInput, 'Password is required');
+                hasError = true;
+            } else {
+                const validation = Validator.validatePassword(password);
+                if (!validation.valid) {
+                    Validator.showError(passwordInput, validation.message);
+                    hasError = true;
+                }
+            }
+
+            if (hasError) {
+                return;
+            }
+
+            // Show loading state
+            const submitButton = this.querySelector('.btn-login');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Signing in...';
+            submitButton.disabled = true;
+
+            // Simulate authentication (in real app, this would be an API call)
+            setTimeout(() => {
+                const userData = {
+                    email: email,
+                    name: email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                    role: 'user'
+                };
+
+                // Use SessionManager to create session
+                SessionManager.login(userData);
+
+                // Success notification
+                alert('✅ Login successful! Redirecting to dashboard...');
+                window.location.href = 'admin_dashboard.html';
+            }, 800);
+        });
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function () {
+            if (SessionManager.isLoggedIn()) {
+                const user = SessionManager.getUser();
+                if (confirm(`You are already logged in as ${user.email}. Go to dashboard?`)) {
+                    window.location.href = 'admin_dashboard.html';
+                }
+            }
+        });
+    </script>
+
+    <!-- Enhanced Error/Success Message Styles -->
+    <style>
+        .error-message {
+            color: #f44336;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .success-message {
+            color: var(--primary);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-error {
+            border-color: #f44336 !important;
+            box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2) !important;
+        }
+
+        .input-success {
+            border-color: var(--primary) !important;
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</body>
+
+</html>

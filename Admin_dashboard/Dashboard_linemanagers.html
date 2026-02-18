@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamZone - Lines Manager</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1DB954;
+            --primary-dark: #1aa34a;
+            --dark: #0e0e0e;
+            --dark-secondary: #1a1a1a;
+            --gray: #2a2a2a;
+            --light-gray: #b3b3b3;
+            --white: #ffffff;
+            --orange: #ff9800;
+            --red: #f44336;
+            --blue: #2196F3;
+            --purple: #9C27B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: var(--dark-secondary);
+            min-height: 100vh;
+            padding: 20px 0;
+            position: fixed;
+            width: 280px;
+            border-right: 1px solid var(--gray);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: var(--gray);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-menu i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .menu-badge {
+            margin-left: auto;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background-color: var(--dark-secondary);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .header h1 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .notification-bell {
+            position: relative;
+            margin-right: 20px;
+            font-size: 1.3rem;
+            color: var(--light-gray);
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--red);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--dark-secondary);
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background-color: var(--gray);
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--gray);
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            text-align: center;
+            padding: 25px 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--blue));
+        }
+
+        .stats-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stats-label {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .stats-trend {
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .trend-up {
+            color: var(--primary);
+        }
+
+        .trend-down {
+            color: var(--red);
+        }
+
+        /* Tables */
+        .table {
+            color: var(--white);
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: var(--gray);
+            border-color: var(--gray);
+            font-weight: 600;
+            padding: 15px;
+        }
+
+        .table td {
+            border-color: var(--gray);
+            vertical-align: middle;
+            padding: 15px;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: rgba(29, 185, 84, 0.2);
+            color: var(--primary);
+        }
+
+        .status-inactive {
+            background-color: rgba(255, 152, 0, 0.2);
+            color: var(--orange);
+        }
+
+        .status-expired {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--red);
+        }
+
+        .status-banned {
+            background-color: rgba(156, 39, 176, 0.2);
+            color: var(--purple);
+        }
+
+        /* Plan Badges */
+        .plan-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .plan-basic {
+            background-color: rgba(156, 39, 176, 0.2);
+            color: var(--purple);
+        }
+
+        .plan-standard {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: var(--blue);
+        }
+
+        .plan-premium {
+            background-color: rgba(29, 185, 84, 0.2);
+            color: var(--primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        .btn-edit {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: var(--blue);
+            border: none;
+        }
+
+        .btn-edit:hover {
+            background-color: var(--blue);
+            color: white;
+        }
+
+        .btn-suspend {
+            background-color: rgba(255, 152, 0, 0.2);
+            color: var(--orange);
+            border: none;
+        }
+
+        .btn-suspend:hover {
+            background-color: var(--orange);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--red);
+            border: none;
+        }
+
+        .btn-delete:hover {
+            background-color: var(--red);
+            color: white;
+        }
+
+        .btn-renew {
+            background-color: rgba(29, 185, 84, 0.2);
+            color: var(--primary);
+            border: none;
+        }
+
+        .btn-renew:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-reset {
+            background-color: rgba(156, 39, 176, 0.2);
+            color: var(--purple);
+            border: none;
+        }
+
+        .btn-reset:hover {
+            background-color: var(--purple);
+            color: white;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.3);
+        }
+
+        /* Forms */
+        .form-control {
+            background-color: var(--gray);
+            border: 1px solid var(--gray);
+            color: var(--white);
+            border-radius: 6px;
+            padding: 10px 15px;
+        }
+
+        .form-control:focus {
+            background-color: var(--gray);
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25);
+        }
+
+        /* Search and Filter */
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-gray);
+        }
+
+        .search-box input {
+            padding-left: 40px;
+        }
+
+        .filter-section {
+            background-color: var(--dark-secondary);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            background-color: var(--gray);
+            color: var(--white);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background-color: var(--primary);
+        }
+
+        /* Pagination */
+        .page-link {
+            background-color: var(--gray);
+            border: 1px solid var(--gray);
+            color: var(--white);
+        }
+
+        .page-link:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Modal */
+        .modal-content {
+            background-color: var(--dark-secondary);
+            color: var(--white);
+            border: 1px solid var(--gray);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--gray);
+        }
+
+        /* Line Info */
+        .line-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .line-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Connection Info */
+        .connection-info {
+            font-size: 0.85rem;
+            color: var(--light-gray);
+        }
+
+        .connection-active {
+            color: var(--primary);
+        }
+
+        .connection-inactive {
+            color: var(--light-gray);
+        }
+
+        /* Password Field */
+        .password-field {
+            font-family: monospace;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-brand span,
+            .sidebar-menu span,
+            .menu-badge {
+                display: none;
+            }
+
+            .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .user-info {
+                margin-top: 15px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown .btn {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .profile-dropdown .btn:focus {
+            box-shadow: none;
+        }
+
+        .profile-btn .user-info {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: var(--gray);
+        }
+
+        .profile-btn:hover .user-info {
+            background-color: var(--primary);
+        }
+
+        .profile-btn .user-avatar {
+            width: 38px;
+            height: 38px;
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+
+        .profile-btn .user-details {
+            text-align: left;
+        }
+
+        .profile-btn .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--white);
+        }
+
+        .profile-btn .text-muted {
+            font-size: 0.75rem;
+        }
+
+        .profile-btn .fa-chevron-down {
+            font-size: 0.75rem;
+            color: var(--light-gray);
+            margin-left: 8px;
+        }
+
+        .profile-menu {
+            background-color: var(--dark-secondary);
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            padding: 0;
+            min-width: 220px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
+        }
+
+        .profile-menu .dropdown-header {
+            background-color: var(--gray);
+            color: var(--white);
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .profile-menu .profile-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .profile-menu .dropdown-item {
+            color: var(--white);
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-menu .dropdown-item:hover {
+            background-color: var(--gray);
+            color: var(--primary);
+        }
+
+        .profile-menu .dropdown-item.text-danger:hover {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+        }
+
+        /* Profile Dropdown - Higher z-index to appear above notification */
+        .profile-dropdown .dropdown-menu {
+            z-index: 1060;
+        }
+
+        .notification-dropdown .dropdown-menu {
+            z-index: 1055;
+        }
+
+        /* Notification Button */
+        .notification-btn {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .notification-btn:focus {
+            box-shadow: none;
+        }
+
+        .notification-bell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: var(--gray);
+        }
+
+        .notification-bell:hover {
+            background-color: var(--primary);
+        }
+
+        .notification-bell i {
+            font-size: 1.1rem;
+        }
+
+        /* Notification Menu */
+        .notification-menu {
+            background-color: var(--dark-secondary);
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            padding: 0;
+            min-width: 320px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
+        }
+
+        .notification-menu .dropdown-header {
+            background-color: var(--gray);
+            color: var(--white);
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            font-weight: 600;
+        }
+
+        .notification-menu .notification-item {
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .notification-menu .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-menu .notification-item:hover {
+            background-color: var(--gray);
+        }
+
+        .notification-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.bg-success {
+            background-color: rgba(29, 185, 84, 0.2);
+            color: var(--primary);
+        }
+
+        .notification-icon.bg-primary {
+            background-color: rgba(33, 150, 243, 0.2);
+            color: var(--blue);
+        }
+
+        .notification-icon.bg-warning {
+            background-color: rgba(255, 152, 0, 0.2);
+            color: var(--orange);
+        }
+
+        .notification-icon.bg-danger {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--red);
+        }
+
+        .notification-text {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .notification-time {
+            font-size: 0.75rem;
+            color: var(--light-gray);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-satellite-dish me-2"></i>
+            <span>StreamZone Pro</span>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a href="admin_dashboard.html">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="Dashboard_customers.html">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="active">
+                    <i class="fas fa-satellite-dish"></i>
+                    <span>Lines Manager</span>
+                </a>
+            </li>
+            <li>
+                <a href="Dashboard_billings.html">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Billing & Payments</span>
+                </a>
+            </li>
+            <li>
+                <a href="Servers.html">
+                    <i class="fas fa-server"></i>
+                    <span>Servers</span>
+                </a>
+            </li>
+            <li>
+                <a href="Dashboard_analytics.html">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="logout(); return false;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-satellite-dish"></i> Lines Manager</h1>
+            <div class="d-flex align-items-center">
+                <!-- Notification Section -->
+                <div class="dropdown notification-dropdown">
+                    <button class="btn notification-btn" type="button" id="notificationDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="notification-bell">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">7</span>
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu notification-menu" aria-labelledby="notificationDropdown">
+                        <li class="dropdown-header">
+                            <i class="fas fa-bell me-2"></i>Notifications
+                            <span class="badge bg-danger ms-2">7</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item notification-item" href="#">
+                                <div class="d-flex align-items-start">
+                                    <div class="notification-icon bg-success">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="ms-2">
+                                        <div class="notification-text">New customer registered</div>
+                                        <small class="text-muted">Alex Johnson - 10 min ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item notification-item" href="#">
+                                <div class="d-flex align-items-start">
+                                    <div class="notification-icon bg-primary">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="ms-2">
+                                        <div class="notification-text">Payment received</div>
+                                        <small class="text-muted">$24.99 - Sarah Smith</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-center text-primary" href="#">View All Notifications</a></li>
+                    </ul>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="dropdown profile-dropdown">
+                    <button class="btn profile-btn" type="button" id="profileDropdown" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="user-details">
+                                <div class="user-name">Admin User</div>
+                                <small class="text-muted">Super Administrator</small>
+                            </div>
+                            <i class="fas fa-chevron-down ms-2"></i>
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu profile-menu" aria-labelledby="profileDropdown">
+                        <li class="dropdown-header">
+                            <div class="d-flex align-items-center">
+                                <div class="profile-avatar">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <div class="fw-bold">Admin User</div>
+                                    <small class="text-muted">admin@streamzone.com</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user me-2"></i>My Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-lock me-2"></i>Change Password
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-icon text-primary">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                    <div class="stats-number">1,254</div>
+                    <div class="stats-label">Total Lines</div>
+                    <div class="stats-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> 8.2% from last month
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-icon text-success">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <div class="stats-number">856</div>
+                    <div class="stats-label">Active Lines</div>
+                    <div class="stats-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> 5.7% currently
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-icon text-warning">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div class="stats-number">142</div>
+                    <div class="stats-label">Expiring Soon</div>
+                    <div class="stats-trend trend-down">
+                        <i class="fas fa-arrow-down"></i> 3.1% from last week
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-icon text-danger">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <div class="stats-number">25</div>
+                    <div class="stats-label">Banned Lines</div>
+                    <div class="stats-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> 12.5% from last month
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Row -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="filter-section">
+                    <h5 class="filter-title">Filter Lines</h5>
+                    <div class="filter-options">
+                        <button class="filter-btn active" data-filter="all">All Lines</button>
+                        <button class="filter-btn" data-filter="active">Active</button>
+                        <button class="filter-btn" data-filter="inactive">Inactive</button>
+                        <button class="filter-btn" data-filter="expired">Expired</button>
+                        <button class="filter-btn" data-filter="banned">Banned</button>
+                        <button class="filter-btn" data-filter="premium">Premium</button>
+                        <button class="filter-btn" data-filter="basic">Basic</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex gap-2">
+                    <div class="search-box flex-grow-1">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search lines...">
+                    </div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLineModal">
+                        <i class="fas fa-plus-circle"></i> Add Line
+                    </button>
+                    <button class="btn btn-outline-primary" id="bulkActionsBtn" data-bs-toggle="modal"
+                        data-bs-target="#bulkActionsModal">
+                        <i class="fas fa-cogs"></i> Bulk Actions
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lines Table -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>IPTV Lines List</h5>
+                <div class="d-flex align-items-center">
+                    <span class="me-3">Show</span>
+                    <select class="form-select form-select-sm w-auto" id="entriesSelect">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <span class="ms-2">entries</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="linesTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="selectAll">
+                                    </div>
+                                </th>
+                                <th>Line ID</th>
+                                <th>Customer</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Plan</th>
+                                <th>Status</th>
+                                <th>Connections</th>
+                                <th>Expiry Date</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="linesTableBody">
+                            <!-- Lines data will be loaded here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div id="paginationInfo">Showing 1 to 10 of 1,254 entries</div>
+                    <nav>
+                        <ul class="pagination mb-0" id="pagination">
+                            <!-- Pagination will be generated by JavaScript -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Line Modal -->
+    <div class="modal fade" id="addLineModal" tabindex="-1" aria-labelledby="addLineModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLineModalLabel">Add New IPTV Line</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addLineForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="customerSelect" class="form-label">Customer</label>
+                                <select class="form-select" id="customerSelect" required>
+                                    <option value="">Select Customer</option>
+                                    <option value="1001">John Doe (john_iptv)</option>
+                                    <option value="1002">Sarah Smith (sarah_stream)</option>
+                                    <option value="1005">Robert Brown (robert_iptv)</option>
+                                    <option value="1007">David Miller (david_tv)</option>
+                                    <option value="1010">Maria Thomas (maria_tv)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lineUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="lineUsername" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="linePassword" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control password-field" id="linePassword" required>
+                                    <button class="btn btn-outline-secondary" type="button" id="generatePassword">
+                                        <i class="fas fa-sync-alt"></i> Generate
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="linePlan" class="form-label">Subscription Plan</label>
+                                <select class="form-select" id="linePlan" required>
+                                    <option value="">Select Plan</option>
+                                    <option value="basic">Basic - 1 Connection</option>
+                                    <option value="standard">Standard - 2 Connections</option>
+                                    <option value="premium">Premium - 4 Connections</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="lineExpiryDate" class="form-label">Expiry Date</label>
+                                <input type="date" class="form-control" id="lineExpiryDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lineStatus" class="form-label">Status</label>
+                                <select class="form-select" id="lineStatus" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="banned">Banned</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lineNotes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="lineNotes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveLineBtn">Save Line</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Line Modal -->
+    <div class="modal fade" id="editLineModal" tabindex="-1" aria-labelledby="editLineModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editLineModalLabel">Edit IPTV Line</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editLineForm">
+                        <input type="hidden" id="editLineId">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editCustomer" class="form-label">Customer</label>
+                                <input type="text" class="form-control" id="editCustomer" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editLineUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="editLineUsername" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editLinePassword" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control password-field" id="editLinePassword"
+                                        required>
+                                    <button class="btn btn-outline-secondary" type="button" id="editGeneratePassword">
+                                        <i class="fas fa-sync-alt"></i> Generate
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editLinePlan" class="form-label">Subscription Plan</label>
+                                <select class="form-select" id="editLinePlan" required>
+                                    <option value="">Select Plan</option>
+                                    <option value="basic">Basic - 1 Connection</option>
+                                    <option value="standard">Standard - 2 Connections</option>
+                                    <option value="premium">Premium - 4 Connections</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editLineExpiryDate" class="form-label">Expiry Date</label>
+                                <input type="date" class="form-control" id="editLineExpiryDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editLineStatus" class="form-label">Status</label>
+                                <select class="form-select" id="editLineStatus" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="expired">Expired</option>
+                                    <option value="banned">Banned</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editLineNotes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="editLineNotes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="updateLineBtn">Update Line</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Modal -->
+    <div class="modal fade" id="bulkActionsModal" tabindex="-1" aria-labelledby="bulkActionsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bulkActionsModalLabel">Bulk Actions</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="bulkAction" class="form-label">Select Action</label>
+                        <select class="form-select" id="bulkAction">
+                            <option value="">Choose action...</option>
+                            <option value="activate">Activate Selected Lines</option>
+                            <option value="deactivate">Deactivate Selected Lines</option>
+                            <option value="renew">Renew Selected Lines (30 days)</option>
+                            <option value="delete">Delete Selected Lines</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        This action will affect <span id="selectedCount">0</span> selected lines.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="applyBulkAction">Apply Action</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Sample lines data
+        let lines = [
+            {
+                id: 2001,
+                customerId: 1001,
+                customerName: "John Doe",
+                username: "john_iptv_001",
+                password: "p@ssw0rd123",
+                plan: "premium",
+                status: "active",
+                connections: 2,
+                maxConnections: 4,
+                expiryDate: "2023-12-31",
+                created: "2023-01-15",
+                notes: "Premium customer with annual subscription"
+            },
+            {
+                id: 2002,
+                customerId: 1002,
+                customerName: "Sarah Smith",
+                username: "sarah_stream_001",
+                password: "str3am!2023",
+                plan: "standard",
+                status: "active",
+                connections: 1,
+                maxConnections: 2,
+                expiryDate: "2023-11-20",
+                created: "2023-02-10",
+                notes: "Standard plan, uses mostly on mobile"
+            },
+            {
+                id: 2003,
+                customerId: 1003,
+                customerName: "Mike Johnson",
+                username: "mike_tv_001",
+                password: "m1k3Tv!23",
+                plan: "basic",
+                status: "inactive",
+                connections: 0,
+                maxConnections: 1,
+                expiryDate: "2023-09-15",
+                created: "2023-03-05",
+                notes: "Account suspended due to payment issues"
+            },
+            {
+                id: 2004,
+                customerId: 1004,
+                customerName: "Emma Wilson",
+                username: "emma_ent_001",
+                password: "3mm@2023",
+                plan: "premium",
+                status: "expired",
+                connections: 0,
+                maxConnections: 4,
+                expiryDate: "2023-08-30",
+                created: "2023-01-20",
+                notes: "Subscription expired, needs renewal"
+            },
+            {
+                id: 2005,
+                customerId: 1005,
+                customerName: "Robert Brown",
+                username: "robert_iptv_001",
+                password: "r0b3rt!PTV",
+                plan: "standard",
+                status: "active",
+                connections: 2,
+                maxConnections: 2,
+                expiryDate: "2023-12-15",
+                created: "2023-04-12",
+                notes: "New customer, uses on multiple devices"
+            },
+            {
+                id: 2006,
+                customerId: 1006,
+                customerName: "Lisa Davis",
+                username: "lisa_stream_001",
+                password: "l1s@Str3am",
+                plan: "basic",
+                status: "active",
+                connections: 1,
+                maxConnections: 1,
+                expiryDate: "2023-10-25",
+                created: "2023-05-18",
+                notes: "Basic plan customer"
+            },
+            {
+                id: 2007,
+                customerId: 1007,
+                customerName: "David Miller",
+                username: "david_tv_001",
+                password: "d@v1dTV!23",
+                plan: "premium",
+                status: "active",
+                connections: 3,
+                maxConnections: 4,
+                expiryDate: "2023-12-28",
+                created: "2023-02-22",
+                notes: "Uses multiple devices simultaneously"
+            },
+            {
+                id: 2008,
+                customerId: 1008,
+                customerName: "Jennifer Taylor",
+                username: "jennifer_iptv_001",
+                password: "j3nn!PTV23",
+                plan: "standard",
+                status: "banned",
+                connections: 0,
+                maxConnections: 2,
+                expiryDate: "2023-09-10",
+                created: "2023-03-30",
+                notes: "Account banned due to policy violation"
+            },
+            {
+                id: 2009,
+                customerId: 1009,
+                customerName: "James Anderson",
+                username: "james_stream_001",
+                password: "j@m3s2023",
+                plan: "basic",
+                status: "active",
+                connections: 1,
+                maxConnections: 1,
+                expiryDate: "2023-11-05",
+                created: "2023-06-14",
+                notes: "Recently upgraded from trial"
+            },
+            {
+                id: 2010,
+                customerId: 1010,
+                customerName: "Maria Thomas",
+                username: "maria_tv_001",
+                password: "m@r1@TV!23",
+                plan: "premium",
+                status: "active",
+                connections: 2,
+                maxConnections: 4,
+                expiryDate: "2023-12-20",
+                created: "2023-04-05",
+                notes: "Premium customer with annual subscription"
+            }
+        ];
+
+        // Pagination variables
+        let currentPage = 1;
+        let entriesPerPage = 10;
+        let filteredLines = [...lines];
+        let currentFilter = 'all';
+        let selectedLines = [];
+
+        // DOM elements
+        const linesTableBody = document.getElementById('linesTableBody');
+        const pagination = document.getElementById('pagination');
+        const paginationInfo = document.getElementById('paginationInfo');
+        const entriesSelect = document.getElementById('entriesSelect');
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const saveLineBtn = document.getElementById('saveLineBtn');
+        const updateLineBtn = document.getElementById('updateLineBtn');
+        const generatePasswordBtn = document.getElementById('generatePassword');
+        const editGeneratePasswordBtn = document.getElementById('editGeneratePassword');
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const applyBulkActionBtn = document.getElementById('applyBulkAction');
+        const selectedCountSpan = document.getElementById('selectedCount');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            renderLinesTable();
+            setupEventListeners();
+            updateSelectedCount();
+        });
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Entries per page change
+            entriesSelect.addEventListener('change', function () {
+                entriesPerPage = parseInt(this.value);
+                currentPage = 1;
+                renderLinesTable();
+            });
+
+            // Search input
+            searchInput.addEventListener('input', function () {
+                filterLines();
+                currentPage = 1;
+                renderLinesTable();
+            });
+
+            // Filter buttons
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+                    filterLines();
+                    currentPage = 1;
+                    renderLinesTable();
+                });
+            });
+
+            // Save line button
+            saveLineBtn.addEventListener('click', addLine);
+
+            // Update line button
+            updateLineBtn.addEventListener('click', updateLine);
+
+            // Generate password buttons
+            generatePasswordBtn.addEventListener('click', generatePassword);
+            editGeneratePasswordBtn.addEventListener('click', generateEditPassword);
+
+            // Select all checkbox
+            selectAllCheckbox.addEventListener('change', toggleSelectAll);
+
+            // Apply bulk action button
+            applyBulkActionBtn.addEventListener('click', applyBulkAction);
+        }
+
+        // Filter lines based on search and filter
+        function filterLines() {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            filteredLines = lines.filter(line => {
+                const matchesSearch =
+                    line.customerName.toLowerCase().includes(searchTerm) ||
+                    line.username.toLowerCase().includes(searchTerm) ||
+                    line.id.toString().includes(searchTerm);
+
+                let matchesFilter = true;
+                if (currentFilter !== 'all') {
+                    if (currentFilter === 'premium' || currentFilter === 'basic') {
+                        matchesFilter = line.plan === currentFilter;
+                    } else {
+                        matchesFilter = line.status === currentFilter;
+                    }
+                }
+
+                return matchesSearch && matchesFilter;
+            });
+        }
+
+        // Render lines table
+        function renderLinesTable() {
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * entriesPerPage;
+            const endIndex = Math.min(startIndex + entriesPerPage, filteredLines.length);
+            const pageLines = filteredLines.slice(startIndex, endIndex);
+
+            // Clear table body
+            linesTableBody.innerHTML = '';
+
+            // Add lines to table
+            pageLines.forEach(line => {
+                const row = document.createElement('tr');
+
+                // Determine status badge class
+                let statusBadgeClass = '';
+                switch (line.status) {
+                    case 'active':
+                        statusBadgeClass = 'status-active';
+                        break;
+                    case 'inactive':
+                        statusBadgeClass = 'status-inactive';
+                        break;
+                    case 'expired':
+                        statusBadgeClass = 'status-expired';
+                        break;
+                    case 'banned':
+                        statusBadgeClass = 'status-banned';
+                        break;
+                }
+
+                // Determine plan badge class
+                let planBadgeClass = '';
+                switch (line.plan) {
+                    case 'basic':
+                        planBadgeClass = 'plan-basic';
+                        break;
+                    case 'standard':
+                        planBadgeClass = 'plan-standard';
+                        break;
+                    case 'premium':
+                        planBadgeClass = 'plan-premium';
+                        break;
+                }
+
+                // Check if line is selected
+                const isSelected = selectedLines.includes(line.id);
+
+                row.innerHTML = `
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input line-checkbox" type="checkbox" value="${line.id}" ${isSelected ? 'checked' : ''}>
+                        </div>
+                    </td>
+                    <td>${line.id}</td>
+                    <td>
+                        <div class="line-info">
+                            <div class="line-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <div>${line.customerName}</div>
+                                <small class="text-muted">ID: ${line.customerId}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${line.username}</td>
+                    <td class="password-field">${line.password}</td>
+                    <td><span class="plan-badge ${planBadgeClass}">${line.plan.charAt(0).toUpperCase() + line.plan.slice(1)}</span></td>
+                    <td><span class="status-badge ${statusBadgeClass}">${line.status.charAt(0).toUpperCase() + line.status.slice(1)}</span></td>
+                    <td>
+                        <div class="connection-info ${line.connections > 0 ? 'connection-active' : 'connection-inactive'}">
+                            <i class="fas fa-wifi me-1"></i>
+                            ${line.connections}/${line.maxConnections}
+                        </div>
+                    </td>
+                    <td>${formatDate(line.expiryDate)}</td>
+                    <td>${formatDate(line.created)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-edit btn-sm" onclick="editLine(${line.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-suspend btn-sm" onclick="toggleLineStatus(${line.id})">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button class="btn btn-renew btn-sm" onclick="renewLine(${line.id})">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="btn btn-reset btn-sm" onclick="resetPassword(${line.id})">
+                                <i class="fas fa-key"></i>
+                            </button>
+                            <button class="btn btn-delete btn-sm" onclick="deleteLine(${line.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                linesTableBody.appendChild(row);
+            });
+
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.line-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    const lineId = parseInt(this.value);
+                    if (this.checked) {
+                        if (!selectedLines.includes(lineId)) {
+                            selectedLines.push(lineId);
+                        }
+                    } else {
+                        const index = selectedLines.indexOf(lineId);
+                        if (index > -1) {
+                            selectedLines.splice(index, 1);
+                        }
+                    }
+                    updateSelectedCount();
+                });
+            });
+
+            // Update pagination info
+            paginationInfo.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${filteredLines.length} entries`;
+
+            // Render pagination
+            renderPagination();
+        }
+
+        // Render pagination
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredLines.length / entriesPerPage);
+
+            // Clear pagination
+            pagination.innerHTML = '';
+
+            // Previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" ${currentPage === 1 ? 'tabindex="-1" aria-disabled="true"' : ''}>Previous</a>`;
+            prevLi.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderLinesTable();
+                }
+            });
+            pagination.appendChild(prevLi);
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLi = document.createElement('li');
+                pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                pageLi.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                pageLi.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    currentPage = i;
+                    renderLinesTable();
+                });
+                pagination.appendChild(pageLi);
+            }
+
+            // Next button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" ${currentPage === totalPages ? 'tabindex="-1" aria-disabled="true"' : ''}>Next</a>`;
+            nextLi.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderLinesTable();
+                }
+            });
+            pagination.appendChild(nextLi);
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Generate random password
+        function generatePassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+            let password = '';
+            for (let i = 0; i < 10; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('linePassword').value = password;
+        }
+
+        // Generate random password for edit form
+        function generateEditPassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+            let password = '';
+            for (let i = 0; i < 10; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('editLinePassword').value = password;
+        }
+
+        // Add new line
+        function addLine() {
+            const customerId = document.getElementById('customerSelect').value;
+            const customerName = document.getElementById('customerSelect').options[document.getElementById('customerSelect').selectedIndex].text.split(' (')[0];
+            const username = document.getElementById('lineUsername').value;
+            const password = document.getElementById('linePassword').value;
+            const plan = document.getElementById('linePlan').value;
+            const expiryDate = document.getElementById('lineExpiryDate').value;
+            const status = document.getElementById('lineStatus').value;
+            const notes = document.getElementById('lineNotes').value;
+
+            // Generate new ID
+            const newId = Math.max(...lines.map(l => l.id)) + 1;
+
+            // Determine max connections based on plan
+            let maxConnections = 1;
+            if (plan === 'standard') maxConnections = 2;
+            if (plan === 'premium') maxConnections = 4;
+
+            // Add line to array
+            const newLine = {
+                id: newId,
+                customerId: parseInt(customerId),
+                customerName,
+                username,
+                password,
+                plan,
+                status,
+                connections: 0,
+                maxConnections,
+                expiryDate,
+                created: new Date().toISOString().split('T')[0],
+                notes
+            };
+
+            lines.push(newLine);
+
+            // Reset form and close modal
+            document.getElementById('addLineForm').reset();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addLineModal'));
+            modal.hide();
+
+            // Update UI
+            filterLines();
+            renderLinesTable();
+
+            // Show success message
+            alert('IPTV line added successfully!');
+        }
+
+        // Edit line
+        function editLine(id) {
+            const line = lines.find(l => l.id === id);
+
+            if (line) {
+                // Fill form with line data
+                document.getElementById('editLineId').value = line.id;
+                document.getElementById('editCustomer').value = `${line.customerName} (ID: ${line.customerId})`;
+                document.getElementById('editLineUsername').value = line.username;
+                document.getElementById('editLinePassword').value = line.password;
+                document.getElementById('editLinePlan').value = line.plan;
+                document.getElementById('editLineExpiryDate').value = line.expiryDate;
+                document.getElementById('editLineStatus').value = line.status;
+                document.getElementById('editLineNotes').value = line.notes;
+
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('editLineModal'));
+                modal.show();
+            }
+        }
+
+        // Update line
+        function updateLine() {
+            const id = parseInt(document.getElementById('editLineId').value);
+            const lineIndex = lines.findIndex(l => l.id === id);
+
+            if (lineIndex !== -1) {
+                // Update line data
+                lines[lineIndex].username = document.getElementById('editLineUsername').value;
+                lines[lineIndex].password = document.getElementById('editLinePassword').value;
+                lines[lineIndex].plan = document.getElementById('editLinePlan').value;
+                lines[lineIndex].expiryDate = document.getElementById('editLineExpiryDate').value;
+                lines[lineIndex].status = document.getElementById('editLineStatus').value;
+                lines[lineIndex].notes = document.getElementById('editLineNotes').value;
+
+                // Update max connections based on plan
+                if (lines[lineIndex].plan === 'basic') lines[lineIndex].maxConnections = 1;
+                if (lines[lineIndex].plan === 'standard') lines[lineIndex].maxConnections = 2;
+                if (lines[lineIndex].plan === 'premium') lines[lineIndex].maxConnections = 4;
+
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editLineModal'));
+                modal.hide();
+
+                // Update UI
+                filterLines();
+                renderLinesTable();
+
+                // Show success message
+                alert('IPTV line updated successfully!');
+            }
+        }
+
+        // Toggle line status (active/inactive)
+        function toggleLineStatus(id) {
+            const line = lines.find(l => l.id === id);
+
+            if (line) {
+                if (line.status === 'active') {
+                    line.status = 'inactive';
+                    line.connections = 0;
+                    alert('IPTV line deactivated!');
+                } else {
+                    line.status = 'active';
+                    alert('IPTV line activated!');
+                }
+
+                // Update UI
+                filterLines();
+                renderLinesTable();
+            }
+        }
+
+        // Renew line subscription
+        function renewLine(id) {
+            const line = lines.find(l => l.id === id);
+
+            if (line) {
+                // Extend expiry date by 30 days
+                const currentDate = new Date(line.expiryDate);
+                currentDate.setDate(currentDate.getDate() + 30);
+                line.expiryDate = currentDate.toISOString().split('T')[0];
+
+                // Set status to active
+                line.status = 'active';
+
+                // Update UI
+                filterLines();
+                renderLinesTable();
+
+                // Show success message
+                alert('IPTV line renewed for 30 days!');
+            }
+        }
+
+        // Reset password
+        function resetPassword(id) {
+            const line = lines.find(l => l.id === id);
+
+            if (line) {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+                let password = '';
+                for (let i = 0; i < 10; i++) {
+                    password += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+
+                line.password = password;
+
+                // Update UI
+                filterLines();
+                renderLinesTable();
+
+                // Show success message
+                alert(`Password reset successfully! New password: ${password}`);
+            }
+        }
+
+        // Delete line
+        function deleteLine(id) {
+            if (confirm('Are you sure you want to delete this IPTV line? This action cannot be undone.')) {
+                lines = lines.filter(l => l.id !== id);
+
+                // Remove from selected lines if present
+                const index = selectedLines.indexOf(id);
+                if (index > -1) {
+                    selectedLines.splice(index, 1);
+                }
+
+                // Update UI
+                filterLines();
+                renderLinesTable();
+                updateSelectedCount();
+
+                // Show success message
+                alert('IPTV line deleted successfully!');
+            }
+        }
+
+        // Toggle select all lines
+        function toggleSelectAll() {
+            const checkboxes = document.querySelectorAll('.line-checkbox');
+            if (selectAllCheckbox.checked) {
+                // Select all visible lines
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                    const lineId = parseInt(checkbox.value);
+                    if (!selectedLines.includes(lineId)) {
+                        selectedLines.push(lineId);
+                    }
+                });
+            } else {
+                // Deselect all lines
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                selectedLines = [];
+            }
+            updateSelectedCount();
+        }
+
+        // Update selected count display
+        function updateSelectedCount() {
+            selectedCountSpan.textContent = selectedLines.length;
+        }
+
+        // Apply bulk action
+        function applyBulkAction() {
+            const action = document.getElementById('bulkAction').value;
+
+            if (!action) {
+                alert('Please select an action to perform.');
+                return;
+            }
+
+            if (selectedLines.length === 0) {
+                alert('Please select at least one line to perform the action.');
+                return;
+            }
+
+            let message = '';
+
+            switch (action) {
+                case 'activate':
+                    selectedLines.forEach(id => {
+                        const line = lines.find(l => l.id === id);
+                        if (line) {
+                            line.status = 'active';
+                        }
+                    });
+                    message = 'Selected lines activated successfully!';
+                    break;
+
+                case 'deactivate':
+                    selectedLines.forEach(id => {
+                        const line = lines.find(l => l.id === id);
+                        if (line) {
+                            line.status = 'inactive';
+                            line.connections = 0;
+                        }
+                    });
+                    message = 'Selected lines deactivated successfully!';
+                    break;
+
+                case 'renew':
+                    selectedLines.forEach(id => {
+                        const line = lines.find(l => l.id === id);
+                        if (line) {
+                            const currentDate = new Date(line.expiryDate);
+                            currentDate.setDate(currentDate.getDate() + 30);
+                            line.expiryDate = currentDate.toISOString().split('T')[0];
+                            line.status = 'active';
+                        }
+                    });
+                    message = 'Selected lines renewed for 30 days!';
+                    break;
+
+                case 'delete':
+                    if (confirm(`Are you sure you want to delete ${selectedLines.length} lines? This action cannot be undone.`)) {
+                        lines = lines.filter(l => !selectedLines.includes(l.id));
+                        selectedLines = [];
+                        message = 'Selected lines deleted successfully!';
+                    } else {
+                        return;
+                    }
+                    break;
+            }
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('bulkActionsModal'));
+            modal.hide();
+
+            // Reset select all checkbox
+            selectAllCheckbox.checked = false;
+
+            // Update UI
+            filterLines();
+            renderLinesTable();
+            updateSelectedCount();
+
+            // Show success message
+            alert(message);
+        }
+    </script>
+    <!-- Authentication Logic -->
+    <script src="auth.js"></script>
+    <script>
+        // Check authentication on load
+        requireAuth();
+    </script>
+</body>
+
+</html>
